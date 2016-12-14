@@ -1,0 +1,39 @@
+{
+  "author": "gucong3000",
+  "bugs": {
+    "url": "https://github.com/gucong3000/git-bash-shell/issues"
+  },
+  "dependencies": {
+    "lru-cache": "^4.0.2",
+    "mz": "^2.6.0",
+    "os-homedir": "^1.0.2"
+  },
+  "description": "Use Git Bash as shell on windows",
+  "devDependencies": {
+    "cover": "^0.2.9",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.2.0"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "homepage": "https://github.com/gucong3000/git-bash-shell#readme",
+  "keywords": [
+    "child_process",
+    "sh",
+    "bash"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "git-bash-shell",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gucong3000/git-bash-shell.git"
+  },
+  "scripts": {
+    "coveralls": "npm run test-cov && coveralls < coverage/lcov.info",
+    "test": "mocha",
+    "test-cov": "istanbul cover node_modules/mocha/bin/_mocha"
+  },
+  "version": "1.0.0"
+}

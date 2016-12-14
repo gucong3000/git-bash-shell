@@ -2,8 +2,7 @@ git-bash-shell
 ===========
 
 [![NPM version](https://img.shields.io/npm/v/git-bash-shell.svg?style=flat-square)](https://www.npmjs.com/package/git-bash-shell)
-[![AppVeyor](https://img.shields.io/appveyor/ci/gucong3000/git-bash-shell.svg?&label=Windows)](https://ci.appveyor.com/project/gucong3000/git-bash-shell)
-[![Coverage Status](https://img.shields.io/coveralls/gucong3000/git-bash-shell.svg)](https://coveralls.io/r/gucong3000/git-bash-shell)
+[![AppVeyor](https://img.shields.io/appveyor/ci/gucong3000/git-bash-shell.svg)](https://ci.appveyor.com/project/gucong3000/git-bash-shell)
 
 Use Git Bash as shell on windows
 
