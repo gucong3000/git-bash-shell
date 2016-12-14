@@ -18,6 +18,9 @@
   "directories": {
     "test": "test"
   },
+  "engines": {
+    "node": ">=4"
+  },
   "homepage": "https://github.com/gucong3000/git-bash-shell#readme",
   "keywords": [
     "child_process",
