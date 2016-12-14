@@ -10,6 +10,7 @@
   },
   "description": "Use Git Bash as shell on windows",
   "devDependencies": {
+    "any-promise": "^1.3.0",
     "cover": "^0.2.9",
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0"
