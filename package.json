@@ -30,6 +30,9 @@
   "license": "MIT",
   "main": "index.js",
   "name": "git-bash-shell",
+  "os": [
+    "win32"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gucong3000/git-bash-shell.git"
@@ -39,5 +42,5 @@
     "test": "mocha",
     "test-cov": "istanbul cover node_modules/mocha/bin/_mocha"
   },
-  "version": "1.0.1"
+  "version": "1.0.2"
 }
