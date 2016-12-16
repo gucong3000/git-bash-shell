@@ -4,16 +4,20 @@
     "url": "https://github.com/gucong3000/git-bash-shell/issues"
   },
   "dependencies": {
+    "git-win": "^1.0.0",
     "lru-cache": "^4.0.2",
     "mz": "^2.6.0",
     "os-homedir": "^1.0.2"
   },
-  "description": "Use Git Bash as shell on windows",
+  "description": "Use Linux command under Windows",
   "devDependencies": {
     "any-promise": "^1.3.0",
     "cover": "^0.2.9",
+    "coveralls": "^2.11.15",
+    "eslint": "^3.12.2",
     "istanbul": "^0.4.5",
-    "mocha": "^3.2.0"
+    "mocha": "^3.2.0",
+    "node-version-check": "^2.1.1"
   },
   "directories": {
     "test": "test"
@@ -39,8 +43,9 @@
   },
   "scripts": {
     "coveralls": "npm run test-cov && coveralls < coverage/lcov.info",
-    "test": "mocha",
+    "lint": "node-version-gte-4 && eslint lib/*.js || echo \"ESLint not supported\"",
+    "test": "npm run lint && mocha",
     "test-cov": "istanbul cover node_modules/mocha/bin/_mocha"
   },
-  "version": "1.0.2"
+  "version": "1.0.3"
 }

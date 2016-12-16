@@ -4,12 +4,14 @@ git-bash-shell
 [![NPM version](https://img.shields.io/npm/v/git-bash-shell.svg?style=flat-square)](https://www.npmjs.com/package/git-bash-shell)
 [![AppVeyor](https://img.shields.io/appveyor/ci/gucong3000/git-bash-shell.svg)](https://ci.appveyor.com/project/gucong3000/git-bash-shell)
 
-Use Git Bash as shell on windows
+Use Linux command under Windows
 
 ## Why
+
 - Support [PATHEXT](https://github.com/joyent/node/issues/2318)
 - Support [shebangs](http://pt.wikipedia.org/wiki/Shebang)
-- Support [bash](https://pt.wikipedia.org/wiki/Bash) shell
+- Use Git [Bash](https://pt.wikipedia.org/wiki/Bash) as shell of child process.
+
 
 ## Install
 
