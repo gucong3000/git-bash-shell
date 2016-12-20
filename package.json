@@ -4,7 +4,7 @@
     "url": "https://github.com/gucong3000/git-bash-shell/issues"
   },
   "dependencies": {
-    "git-win": "^1.0.1",
+    "git-win": "^1.0.2",
     "lru-cache": "^4.0.2",
     "mz": "^2.6.0",
     "os-homedir": "^1.0.2"
