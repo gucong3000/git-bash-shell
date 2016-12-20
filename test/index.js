@@ -31,7 +31,7 @@ describe('git path', function() {
 	it('zdiff --help', function() {
 		return Promise.all([
 			exec('zdiff --help'),
-			execFile('zdiff', ['--help']),
+			execFile('/usr/bin/zdiff', ['--help']),
 		]).then(function(result) {
 			assert.ok(result[0][0].indexOf('OPTIONs are the same as for') >= 0);
 			assert.deepEqual(result[0], result[1]);
