@@ -8,10 +8,10 @@ Use Linux command under Windows
 
 ## Why
 
-- Support [PATHEXT](https://github.com/joyent/node/issues/2318)
+- Support [POSIX](https://en.wikipedia.org/wiki/POSIX) file path.
 - Support [shebangs](http://pt.wikipedia.org/wiki/Shebang)
 - Use Git [Bash](https://pt.wikipedia.org/wiki/Bash) as shell of child process.
-
+- Support [PATHEXT](https://github.com/joyent/node/issues/2318)
 
 ## Install
 
