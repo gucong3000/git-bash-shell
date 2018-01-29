@@ -5,16 +5,17 @@
 		"node": true
 	},
 	"extends": [
-		"eslint:recommended"
+		"standard"
 	],
+	"parserOptions": {
+		"sourceType": "script",
+		"ecmaVersion": 2017
+	},
 	"root": true,
 	"rules": {
-		"comma-spacing": [
+		"comma-dangle": [
 			"error",
-			{
-				"after": true,
-				"before": false
-			}
+			"always-multiline"
 		],
 		"indent": [
 			"warn",
@@ -23,18 +24,8 @@
 				"SwitchCase": 1
 			}
 		],
-		"no-console": [
-			"off",
-			{
-			}
-		],
-		"quotes": [
-			"error",
-			"single",
-			{
-				"allowTemplateLiterals": true,
-				"avoidEscape": true
-			}
+		"no-tabs": [
+			"off"
 		],
 		"semi": [
 			"error",
@@ -43,16 +34,8 @@
 				"omitLastInOneLineBlock": false
 			}
 		],
-		"space-before-blocks": [
-			"error",
-			"always"
-		],
-		"space-infix-ops": [
+		"strict": [
 			"error"
-		],
-		"spaced-comment": [
-			"error",
-			"always"
 		],
 		"valid-jsdoc": [
 			"warn",

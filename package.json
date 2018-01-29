@@ -4,20 +4,23 @@
     "url": "https://github.com/gucong3000/git-bash-shell/issues"
   },
   "dependencies": {
-    "git-win": "^1.2.0",
-    "lru-cache": "^4.1.0",
-    "mz": "^2.6.0",
+    "git-win": "^1.5.1",
+    "lru-cache": "^4.1.1",
+    "mz": "^2.7.0",
     "os-homedir": "^1.0.2"
   },
   "description": "Use Linux command under Windows",
   "devDependencies": {
-    "any-promise": "^1.3.0",
+    "codecov": "^3.0.0",
     "cover": "^0.2.9",
-    "coveralls": "^3.0.0",
-    "eslint": "^4.1.0",
+    "eslint": "^4.16.0",
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
     "istanbul": "^0.4.5",
-    "mocha": "^5.0.0",
-    "node-version-check": "^2.1.1"
+    "mocha": "^5.0.0"
   },
   "directories": {
     "test": "test"
@@ -42,10 +45,10 @@
     "url": "git+https://github.com/gucong3000/git-bash-shell.git"
   },
   "scripts": {
-    "coveralls": "npm run test-cov && coveralls < coverage/lcov.info",
-    "lint": "node-version-gte-4 && eslint lib/*.js || echo \"ESLint not supported\"",
-    "test": "npm run lint && mocha",
-    "test-cov": "istanbul cover node_modules/mocha/bin/_mocha"
+    "pretest": "eslint *.js lib test",
+    "test": "nyc mocha --no-timeouts",
+    "test-cov": "istanbul cover node_modules/mocha/bin/_mocha",
+    "report-coverage": "codecov"
   },
   "version": "1.2.2"
 }
