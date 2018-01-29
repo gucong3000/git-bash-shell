@@ -1,17 +1,13 @@
 'use strict';
-var describe = require('mocha').describe;
-// var before = require('mocha').before;
-// var after = require('mocha').after;
-var it = require('mocha').it;
 var assert = require('assert');
-
 var fs = require('mz/fs');
 var execFile = require('mz/child_process').execFile;
 var exec = require('mz/child_process').exec;
 
-require('../');
-
 describe('git path', function () {
+	before(function () {
+		require('../');
+	});
 	it('ls', function () {
 		return execFile('ls').then(function (result) {
 			result = result[0].split(/\r?\n/).filter(Boolean).sort();

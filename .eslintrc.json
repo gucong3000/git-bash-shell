@@ -43,5 +43,15 @@
 				"requireReturn": false
 			}
 		]
-	}
+	},
+	"overrides": [
+		{
+			"files": [
+				"test/**/*"
+			],
+			"env": {
+				"mocha": true
+			}
+		}
+	]
 }
