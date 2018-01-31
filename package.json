@@ -1,5 +1,12 @@
 {
   "author": "gucong3000",
+  "bin": {
+    "$BASH": "bin/bash.cmd",
+    "$SHELL": "bin/bash.cmd",
+    "node": "bin/node.cmd",
+    "bash": "bin/bash.cmd",
+    "sh": "bin/sh.cmd"
+  },
   "bugs": {
     "url": "https://github.com/gucong3000/git-bash-shell/issues"
   },
@@ -45,8 +52,9 @@
     "url": "git+https://github.com/gucong3000/git-bash-shell.git"
   },
   "scripts": {
+    "install": "node.exe lib/install",
     "pretest": "eslint *.js lib test",
-    "test": "nyc mocha --no-timeouts",
+    "test": "mocha --no-timeouts",
     "test-cov": "istanbul cover node_modules/mocha/bin/_mocha",
     "report-coverage": "codecov"
   },
