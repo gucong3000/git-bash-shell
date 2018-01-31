@@ -3,6 +3,7 @@ git-bash-shell
 
 [![NPM version](https://img.shields.io/npm/v/git-bash-shell.svg?style=flat-square)](https://www.npmjs.com/package/git-bash-shell)
 [![AppVeyor](https://img.shields.io/appveyor/ci/gucong3000/git-bash-shell.svg)](https://ci.appveyor.com/project/gucong3000/git-bash-shell)
+[![Codecov](https://img.shields.io/codecov/c/github/gucong3000/git-bash-shell.svg)](https://codecov.io/gh/gucong3000/git-bash-shell)
 
 Use Linux command under Windows
 
@@ -27,24 +28,19 @@ In your package.json file, you can add scripts using `bash` or `sh`:
 ```json
 "scripts": {
 	"foo": "bash bin/my_script.sh",
-	"bar": "sh -c \"[ ! `git diff` ]\" || echo file(s) changed!"
+	"bar": "sh -c \"[ ! \\\"`git diff`\\\" ]\" || echo file(s) changed!"
 }
 ```
 
+Node API:
+
 ```javascript
-require('git-bash-shell');
-const spawn = require('child_process').spawn;
-const ls = spawn('cat', ['README.md']);
-
-ls.stdout.on('data', (data) => {
-	console.log(`stdout: ${data}`);
-});
-
-ls.stderr.on('data', (data) => {
-	console.log(`stderr: ${data}`);
-});
-
-ls.on('close', (code) => {
-	console.log(`child process exited with code ${code}`);
-});
+try {
+	require('git-bash-shell');
+} catch(ex) {
+	//
+}
+const spawn = require('child_process').spawnSync;
+const cat = spawnSync('cat', ['README.md']);
+console.log(cat.stdout.toString())
 ```
