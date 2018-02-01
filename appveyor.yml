@@ -13,13 +13,15 @@ install:
   # install Node.js
   - ps: Install-Product node $env:nodejs_version
   # install modules
-  - npm install
+  - npm i -g npm@latest
+  - npm i
+  - bash -c "cd node_modules/nyc && npm i https://github.com/pangrr/spawn-wrap/archive/fix/shebang-path-space.tar.gz"
 
 
 # to run your custom scripts instead of automatic tests
 test_script:
-  - npm run pretest
-  - npm run test-cov
+  # - setx Path "node_modules\.bin;%Path%"
+  - npm run test
 
 # to run your custom scripts instead of provider deployments
 after_test:
