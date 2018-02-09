@@ -11,8 +11,9 @@ Use Git Bash as cross-platform shell for Windows
 
 - Use Git [Bash](https://en.wikipedia.org/wiki/Bash_(Unix_shell)) as cross-platform shell for child process or [npm run scripts](https://docs.npmjs.com/cli/run-script).
 - Support [POSIX](https://en.wikipedia.org/wiki/POSIX) file path.
-- Support [shebangs](https://en.wikipedia.org/wiki/Shebang_(Unix))
+- Support [Shebang](https://en.wikipedia.org/wiki/Shebang_(Unix))
 - Support [PATHEXT](https://github.com/joyent/node/issues/2318)
+- Support [Shell script](https://en.wikipedia.org/wiki/Shell_script)
 
 ## Install
 
