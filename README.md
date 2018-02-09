@@ -5,7 +5,7 @@ git-bash-shell
 [![AppVeyor](https://img.shields.io/appveyor/ci/gucong3000/git-bash-shell.svg)](https://ci.appveyor.com/project/gucong3000/git-bash-shell)
 [![Codecov](https://img.shields.io/codecov/c/github/gucong3000/git-bash-shell.svg)](https://codecov.io/gh/gucong3000/git-bash-shell)
 
-Use Linux command under Windows
+Use Git Bash as cross-platform shell for Windows
 
 ## Why
 
@@ -22,17 +22,17 @@ npm install --save git-bash-shell
 
 ## Usage
 
-Use cross-platform shell for [npm run scripts](https://docs.npmjs.com/cli/run-script).
-In your package.json file, you can add scripts using `bash` or `sh`:
+In your `package.json` file, you can add script prefix to compatible with Widnows: `env`, `bash`, `sh`, `dash` or `$SHELL`.
 
 ```json
 "scripts": {
 	"git:ls-files": "git ls-files > /tmp/git-files",
 	"lint:eslint": "eslint `grep \\.js$ /tmp/git-files`",
 	"lint:eclint": "eclint check `cat /tmp/git-files`",
-	"lint-flow": "bash -c \"npm-run-all --parallel git:ls-files lint\"",
+	"lint-flow": "env npm-run-all --parallel git:ls-files lint",
 }
 ```
+just run `npm run lint-flow`, and all npm scripts will work under Windows
 
 Node API:
 
@@ -44,3 +44,36 @@ spawnSync('echo `git --version`', {
 	stdio: 'inherit',
 });
 ```
+
+## Environment Variables
+
+### SHELL
+
+- Default: `/usr/bin/bash`
+- Type: path
+
+POSIX specific implementations of shell path.
+
+### ComSpec
+
+- Default: `%ProgramFiles%\Git\usr\bin\bash.exe`
+- Type: path
+
+The shell to use for scripts run with the npm run command.
+If you want to turn off SHELL feature, assign assign environment variable to `cmd.exe`
+
+
+### PATHEXT
+
+- Default: `%PATHEXT%`
+- Type: path list
+
+';'-separated list of suffix to executable file search.
+If you want to turn off PATHEXT feature, just empty this environment variable
+
+### HOME
+
+- Default: `%USERPROFILE%`
+- Type: path
+
+Directory path of `~/`
