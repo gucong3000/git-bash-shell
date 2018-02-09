@@ -27,20 +27,20 @@ In your package.json file, you can add scripts using `bash` or `sh`:
 
 ```json
 "scripts": {
-	"foo": "bash bin/my_script.sh",
-	"bar": "sh -c \"[ ! \\\"`git diff`\\\" ]\" || echo file(s) changed!"
+	"git:ls-files": "git ls-files > /tmp/git-files",
+	"lint:eslint": "eslint `grep \\.js$ /tmp/git-files`",
+	"lint:eclint": "eclint check `cat /tmp/git-files`",
+	"lint-flow": "bash -c \"npm-run-all --parallel git:ls-files lint\"",
 }
 ```
 
 Node API:
 
 ```javascript
-try {
-	require('git-bash-shell');
-} catch(ex) {
-	//
-}
-const spawn = require('child_process').spawnSync;
-const cat = spawnSync('cat', ['README.md']);
-console.log(cat.stdout.toString())
+require('git-bash-shell')();
+const spawnSync = require('cross-spawn').sync;
+spawnSync('echo `git --version`', {
+	shell: true,
+	stdio: 'inherit',
+});
 ```

@@ -1,23 +1,30 @@
 @echo off
-
-if defined BASH (
-	if exist "%BASH%" (
-		goto :END_OF_FILE
-	) else (
-		SET BASH=
-	)
+if exist "%SHELL%" (
+	goto :NODE_OPTIONS
 )
 
 (where [.exe && (
-	goto :END_OF_FILE
+	goto :SET_SHELL
 )) >nul 2>nul
 
 rem add the unix commands at the end to not shadow windows commands like more
 :: check if git is in registry...
 for /F "tokens=1,2,*" %%i in ('reg query HKLM\SOFTWARE\GitForWindows /v InstallPath 2^>nul ^| find "InstallPath"') do (
-	SET "PATH=%PATH%;%%k\cmd;%%k\usr\bin;%%k\usr\share\vim\vim74"
-	SET "BASH=%%k\usr\bin\bash.exe"
-	goto :END_OF_FILE
+	set "Path=%Path%;%%k\cmd;%%k\usr\bin;%%k\usr\share\vim\vim74"
+	set "SHELL=%%k\usr\bin\sh"
+	goto :NODE_OPTIONS
 )
 
-:END_OF_FILE
+:SET_SHELL
+for /F "delims=" %%F in ('cygpath -w /usr/bin/') do (
+	set "SHELL=%%Fsh"
+)
+
+:NODE_OPTIONS
+set "npm_config_script_shell=%SHELL%"
+for /F "delims=" %%F in ('cygpath -w "%~dp0\..\index.js"') do (
+	set "NODE_OPTIONS=%NODE_OPTIONS% --require %%F"
+)
+for /F "delims=" %%F in ('cygpath -w "%~dp0\wrap"') do (
+	set "Path=%%F;%Path%"
+)
