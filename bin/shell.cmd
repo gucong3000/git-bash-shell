@@ -1,4 +1,3 @@
 @SETLOCAL
-@call "%~dp0\environment.cmd"
-set "SHELL=%SHELL:~0,-4%%0"
+@call "%~dp0\environment.cmd" %0
 "%SHELL%" %*
