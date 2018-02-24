@@ -9,7 +9,7 @@
     "string-argv": "0.0.2"
   },
   "optionalDependencies": {
-    "git-win": "^1.5.1"
+    "git-win": "github:gucong3000/git-win#arch"
   },
   "devDependencies": {
     "codecov": "^3.0.0",
