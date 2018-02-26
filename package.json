@@ -9,7 +9,7 @@
     "string-argv": "0.0.2"
   },
   "optionalDependencies": {
-    "git-win": "^1.5.1"
+    "git-win": "^1.5.3"
   },
   "devDependencies": {
     "codecov": "^3.0.0",
@@ -61,6 +61,7 @@
     "url": "git+https://github.com/gucong3000/git-bash-shell.git"
   },
   "scripts": {
+    "preinstall": "(node -e \"require('util').promisify.call\" || node -e \"require('util.promisify')\") 2>nul || npm i util.promisify",
     "postinstall": "node lib/postinstall",
     "uninstall": "uninstall.cmd || sh uninstall.sh",
     "git:ls-files": "git ls-files > /tmp/git-files",
