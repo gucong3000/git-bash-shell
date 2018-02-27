@@ -9,7 +9,7 @@
     "string-argv": "0.0.2"
   },
   "optionalDependencies": {
-    "git-win": "^1.5.3"
+    "git-win": "^1.5.4"
   },
   "devDependencies": {
     "codecov": "^3.0.0",
