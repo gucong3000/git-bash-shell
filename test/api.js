@@ -1,4 +1,5 @@
 'use strict';
+var pathStartsWith = require('../lib/path-starts-with');
 var fixSpawnArgs = require('../lib/fix-spawn-args');
 var getEnvPath = require('../lib/get-env-path');
 var shebang = require('../lib/shebang');
@@ -183,6 +184,10 @@ describe('API', function () {
 			expect(options.args[0]).to.equal('bash');
 			expect(options.args[1]).to.equal('--posix');
 			expect(options.args[2]).to.equal('file.sh');
+		});
+		it('pathStartsWith', function () {
+			expect(pathStartsWith('/foo/bar', '/foo')).to.equal('/bar');
+			expect(pathStartsWith('', '/foo')).to.not.ok();
 		});
 	});
 });

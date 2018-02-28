@@ -151,5 +151,13 @@ describe('environment', function () {
 			expect(process.env.npm_config_script_shell).to.be(process.env.ComSpec);
 			expect(process.env.SHELL).to.equal('/usr/bin/bash');
 		});
+		it('SHELL=/c/Program Files/Git/bin/bash.exe', function () {
+			process.env.SHELL = path.join(gitDir, 'bin/bash.exe').replace(/^(\w):\\/g, '/$1/').replace(/\\/g, '/');
+			require('../lib/env-shell');
+			expect(process.env.ComSpec).to.match(/^(.*)\\bin\\bash.exe$/);
+			expect(RegExp.$1).to.equal(gitDir);
+			expect(process.env.npm_config_script_shell).to.be(process.env.ComSpec);
+			expect(process.env.SHELL).to.equal('/bin/bash');
+		});
 	});
 });
