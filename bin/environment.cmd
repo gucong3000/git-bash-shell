@@ -1,5 +1,9 @@
 @echo off
 
+if not defined LANG (
+	chcp 65001 >nul 2>nul
+)
+
 if "%1"=="" (
 	if exist "%SHELL%.exe" (
 		goto :EOF
