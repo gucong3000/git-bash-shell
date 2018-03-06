@@ -6,6 +6,7 @@ var expect = require('expect.js');
 describe('environment', function () {
 	before(function () {
 		delete process.env.LANG;
+		delete process.env.HOME;
 		delete process.env.NODE_OPTIONS;
 		delete process.env.SHELL;
 		delete process.env.ComSpec;
