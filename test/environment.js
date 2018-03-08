@@ -1,5 +1,5 @@
 'use strict';
-var gitDir = require('git-win');
+var gitWin = require('git-win');
 var path = require('path');
 var expect = require('expect.js');
 
@@ -20,13 +20,13 @@ describe('environment', function () {
 				Path = process.env.Path.split(/\s*;\s*/);
 			});
 			it('Git/cmd', function () {
-				expect(Path).to.contain(path.join(gitDir, 'cmd'));
+				expect(Path).to.contain(path.join(gitWin, 'cmd'));
 			});
 			it('Git/usr/bin', function () {
-				expect(Path).to.contain(path.join(gitDir, 'usr/bin'));
+				expect(Path).to.contain(path.join(gitWin, 'usr/bin'));
 			});
 			it('Git/usr/share/vim/vim74', function () {
-				expect(Path).to.contain(path.join(gitDir, 'usr/share/vim/vim74'));
+				expect(Path).to.contain(path.join(gitWin, 'usr/share/vim/vim74'));
 			});
 			it('git-bash-shell/bin/wrap', function () {
 				var wrap = path.resolve(__dirname, '../bin/wrap');
@@ -98,7 +98,7 @@ describe('environment', function () {
 
 		it('ComSpec', function () {
 			expect(process.env.ComSpec).to.match(/^(.*)\\usr\\bin\\bash.exe$/);
-			expect(RegExp.$1).to.equal(gitDir);
+			expect(RegExp.$1).to.equal(gitWin);
 		});
 
 		it('npm_config_script_shell', function () {
@@ -152,7 +152,7 @@ describe('environment', function () {
 			process.env.SHELL = '/usr/bin/dash.exe';
 			require('../lib/env-shell');
 			expect(process.env.ComSpec).to.match(/^(.*)\\usr\\bin\\dash.exe$/);
-			expect(RegExp.$1).to.equal(gitDir);
+			expect(RegExp.$1).to.equal(gitWin);
 			expect(process.env.npm_config_script_shell).to.be(process.env.ComSpec);
 			expect(process.env.SHELL).to.equal('/usr/bin/dash');
 		});
@@ -160,15 +160,15 @@ describe('environment', function () {
 			process.env.SHELL = 'bash';
 			require('../lib/env-shell');
 			expect(process.env.ComSpec).to.match(/^(.*)\\usr\\bin\\bash.exe$/);
-			expect(RegExp.$1).to.equal(gitDir);
+			expect(RegExp.$1).to.equal(gitWin);
 			expect(process.env.npm_config_script_shell).to.be(process.env.ComSpec);
 			expect(process.env.SHELL).to.equal('/usr/bin/bash');
 		});
 		it('SHELL=/c/Program Files/Git/bin/bash.exe', function () {
-			process.env.SHELL = path.join(gitDir, 'bin/bash.exe').replace(/^(\w):\\/g, '/$1/').replace(/\\/g, '/');
+			process.env.SHELL = path.join(gitWin, 'bin/bash.exe').replace(/^(\w):\\/g, '/$1/').replace(/\\/g, '/');
 			require('../lib/env-shell');
 			expect(process.env.ComSpec).to.match(/^(.*)\\bin\\bash.exe$/);
-			expect(RegExp.$1).to.equal(gitDir);
+			expect(RegExp.$1).to.equal(gitWin);
 			expect(process.env.npm_config_script_shell).to.be(process.env.ComSpec);
 			expect(process.env.SHELL).to.equal('/bin/bash');
 		});
