@@ -5,6 +5,7 @@ var expect = require('expect.js');
 
 describe('environment', function () {
 	before(function () {
+		delete process.env.LANG;
 		delete process.env.NODE_OPTIONS;
 		delete process.env.SHELL;
 		delete process.env.ComSpec;
@@ -104,6 +105,18 @@ describe('environment', function () {
 			expect(process.env.npm_config_script_shell).to.equal(process.env.ComSpec);
 		});
 	});
+
+	describe('env-lang', function () {
+		beforeEach(function () {
+			delete require.cache[require.resolve('../lib/env-lang')];
+			delete process.env.LANG;
+		});
+		it('LANG', function () {
+			require('../lib/env-lang');
+			expect(process.env.LANG).to.match(/^[a-z]+(?:_[A-Z]+)\.UTF-8$/i);
+		});
+	});
+
 	describe('env-shell', function () {
 		beforeEach(function () {
 			delete require.cache[require.resolve('../lib/env-shell')];
