@@ -2,9 +2,10 @@
 'use strict';
 function init (force) {
 	if (process.platform === 'win32') {
-		require('./lib/env-node-options');
-		require('./lib/env-path');
 		require('./lib/patch');
+		require('./lib/env-lang');
+		require('./lib/env-path');
+		require('./lib/env-node-options');
 		if (force) {
 			require('./lib/env-shell');
 		}
