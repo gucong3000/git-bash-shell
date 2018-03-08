@@ -4,6 +4,7 @@ git-bash-shell
 [![NPM version](https://img.shields.io/npm/v/git-bash-shell.svg?style=flat-square)](https://www.npmjs.com/package/git-bash-shell)
 [![AppVeyor](https://img.shields.io/appveyor/ci/gucong3000/git-bash-shell.svg)](https://ci.appveyor.com/project/gucong3000/git-bash-shell)
 [![Codecov](https://img.shields.io/codecov/c/github/gucong3000/git-bash-shell.svg)](https://codecov.io/gh/gucong3000/git-bash-shell)
+[![David](https://img.shields.io/david/gucong3000/git-bash-shell.svg)](https://david-dm.orncu --helpg/gucong3000/git-bash-shell)
 
 Use Git Bash as cross-platform shell for Windows
 
