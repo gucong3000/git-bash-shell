@@ -30,6 +30,14 @@ describe('API', function () {
 			expect(Path).to.have.length(1);
 			expect(Path).to.contain('C:\\windows\\mock\\%notexist%');
 		});
+
+		it('USERPROFILE', function () {
+			var home = getEnvPath({
+				HOMEDRIVE: 'c:',
+				HOMEPATH: '\\Users\\mock',
+			}, 'USERPROFILE');
+			expect(home).to.equal('c:\\Users\\mock');
+		});
 	});
 	describe('shebang', function () {
 		var tempDir;
