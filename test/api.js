@@ -15,20 +15,20 @@ describe('API', function () {
 		});
 
 		it('ignore case', function () {
-			var Path = getEnvPath({
+			var PATH = getEnvPath({
 				PATH: 'mock',
 			});
-			expect(Path).to.have.length(1);
-			expect(Path).to.contain('mock');
+			expect(PATH).to.have.length(1);
+			expect(PATH).to.contain('mock');
 		});
 
 		it('Environment variables', function () {
-			var Path = getEnvPath({
+			var PATH = getEnvPath({
 				WINDIR: 'C:\\windows',
-				Path: '%windir%\\mock\\%notexist%',
+				PATH: '%windir%\\mock\\%notexist%',
 			});
-			expect(Path).to.have.length(1);
-			expect(Path).to.contain('C:\\windows\\mock\\%notexist%');
+			expect(PATH).to.have.length(1);
+			expect(PATH).to.contain('C:\\windows\\mock\\%notexist%');
 		});
 
 		it('USERPROFILE', function () {

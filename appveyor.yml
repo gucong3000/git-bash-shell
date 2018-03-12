@@ -19,7 +19,7 @@ install:
 
 # to run your custom scripts instead of automatic tests
 test_script:
-  # - setx Path "node_modules\.bin;%Path%"
+  # - setx PATH "node_modules\.bin;%PATH%"
   - npm test
 
 # to run your custom scripts instead of provider deployments
