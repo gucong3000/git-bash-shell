@@ -12,25 +12,25 @@ describe('environment', function () {
 		delete process.env.npm_config_script_shell;
 	});
 	describe('env-path', function () {
-		describe('Path', function () {
-			var Path;
+		describe('PATH', function () {
+			var PATH;
 			before(function () {
 				delete require.cache[require.resolve('../lib/env-path')];
 				require('../lib/env-path');
-				Path = process.env.Path.split(/\s*;\s*/);
+				PATH = process.env.PATH.split(/\s*;\s*/);
 			});
 			it('Git/cmd', function () {
-				expect(Path).to.contain(path.join(gitWin, 'cmd'));
+				expect(PATH).to.contain(path.join(gitWin, 'cmd'));
 			});
 			it('Git/usr/bin', function () {
-				expect(Path).to.contain(path.join(gitWin, 'usr/bin'));
+				expect(PATH).to.contain(path.join(gitWin, 'usr/bin'));
 			});
 			it('Git/usr/share/vim/vim74', function () {
-				expect(Path).to.contain(path.join(gitWin, 'usr/share/vim/vim74'));
+				expect(PATH).to.contain(path.join(gitWin, 'usr/share/vim/vim74'));
 			});
 			it('git-bash-shell/bin/wrap', function () {
 				var wrap = path.resolve(__dirname, '../bin/wrap');
-				expect(Path[0]).to.equal(wrap);
+				expect(PATH[0]).to.equal(wrap);
 			});
 		});
 		describe('Windows install dir', function () {
@@ -42,19 +42,19 @@ describe('environment', function () {
 				delete require.cache[require.resolve('../lib/env-path')];
 				delete process.env.windir;
 				delete process.env.SystemRoot;
-				delete process.env.Path;
+				delete process.env.PATH;
 			});
 			it('windir', function () {
-				process.env.Path = 'C:\\win;C:\\cygwin64';
+				process.env.PATH = 'C:\\win;C:\\cygwin64';
 				process.env.windir = 'C:\\win';
 				require('../lib/env-path');
-				expect(process.env.Path).match(/^.+?\\git-bash-shell\\bin\\wrap;C:\\cygwin64;.*?;C:\\win$/);
+				expect(process.env.PATH).match(/^.+?\\git-bash-shell\\bin\\wrap;C:\\cygwin64;.*?;C:\\win$/);
 			});
 			it('SystemRoot', function () {
-				process.env.Path = 'C:\\win;C:\\cygwin64';
+				process.env.PATH = 'C:\\win;C:\\cygwin64';
 				process.env.SystemRoot = 'C:\\win';
 				require('../lib/env-path');
-				expect(process.env.Path).match(/^.+?\\git-bash-shell\\bin\\wrap;C:\\cygwin64;.*?;C:\\win$/);
+				expect(process.env.PATH).match(/^.+?\\git-bash-shell\\bin\\wrap;C:\\cygwin64;.*?;C:\\win$/);
 			});
 		});
 	});
