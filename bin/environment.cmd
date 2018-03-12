@@ -1,6 +1,8 @@
 @echo off
 
-if not defined LANG (
+if not "%LANG:~-6%"==".UTF-8" (
+	chcp 65001 >nul 2>nul
+) else if "%LANG%"=="C.UTF-8" (
 	chcp 65001 >nul 2>nul
 )
 
