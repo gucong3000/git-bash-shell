@@ -1,118 +1,118 @@
-'use strict';
-var pathStartsWith = require('../lib/path-starts-with');
-var fixSpawnArgs = require('../lib/fix-spawn-args');
-var getEnvPath = require('../lib/get-env-path');
-var shebang = require('../lib/shebang');
-var expect = require('expect.js');
-var path = require('path');
-var fs = require('fs-extra');
-var os = require('os');
+"use strict";
+const pathStartsWith = require("../lib/path-starts-with");
+const fixSpawnArgs = require("../lib/fix-spawn-args");
+const getEnvPath = require("../lib/get-env-path");
+const shebang = require("../lib/shebang");
+const expect = require("expect.js");
+const path = require("path");
+const fs = require("fs-extra");
+const os = require("os");
 
-describe('API', function () {
-	describe('get-env-path', function () {
-		it('no result', function () {
+describe("API", () => {
+	describe("get-env-path", () => {
+		it("no result", () => {
 			expect(getEnvPath({})).to.have.length(0);
 		});
 
-		it('ignore case', function () {
-			var PATH = getEnvPath({
-				PATH: 'mock',
+		it("ignore case", () => {
+			const PATH = getEnvPath({
+				PATH: "mock",
 			});
 			expect(PATH).to.have.length(1);
-			expect(PATH).to.contain('mock');
+			expect(PATH).to.contain("mock");
 		});
 
-		it('Environment variables', function () {
-			var PATH = getEnvPath({
-				WINDIR: 'C:\\windows',
-				PATH: '%windir%\\mock\\%notexist%',
+		it("Environment variables", () => {
+			const PATH = getEnvPath({
+				WINDIR: "C:\\windows",
+				PATH: "%windir%\\mock\\%notexist%",
 			});
 			expect(PATH).to.have.length(1);
-			expect(PATH).to.contain('C:\\windows\\mock\\%notexist%');
+			expect(PATH).to.contain("C:\\windows\\mock\\%notexist%");
 		});
 
-		it('USERPROFILE', function () {
-			var home = getEnvPath({
-				HOMEDRIVE: 'c:',
-				HOMEPATH: '\\Users\\mock',
-			}, 'USERPROFILE');
-			expect(home).to.equal('c:\\Users\\mock');
+		it("USERPROFILE", () => {
+			const home = getEnvPath({
+				HOMEDRIVE: "c:",
+				HOMEPATH: "\\Users\\mock",
+			}, "USERPROFILE");
+			expect(home).to.equal("c:\\Users\\mock");
 		});
 	});
-	describe('shebang', function () {
-		var tempDir;
+	describe("shebang", () => {
+		let tempDir;
 		function testShebang (file, contents) {
 			file = path.resolve(tempDir, file);
-			return fs.outputFile(file, contents).then(function () {
+			return fs.outputFile(file, contents).then(() => {
 				return shebang(file);
 			});
 		}
-		before(function () {
-			return fs.mkdtemp(path.join(os.tmpdir(), 'git-bash-shell-shebang-')).then(function (dir) {
+		before(() => {
+			return fs.mkdtemp(path.join(os.tmpdir(), "git-bash-shell-shebang-")).then((dir) => {
 				tempDir = dir;
 			});
 		});
-		after(function () {
+		after(() => {
 			return fs.remove(tempDir);
 		});
-		it('npm bin with shebang', function () {
+		it("npm bin with shebang", () => {
 			return testShebang(
-				'node_modules/.bin/with_shebang',
-				'#!cat\n'
-			).then(function (shebang) {
+				"node_modules/.bin/with_shebang",
+				"#!cat\n"
+			).then((shebang) => {
 				expect(shebang).to.have.length(2);
-				expect(shebang[0]).to.equal('cat');
+				expect(shebang[0]).to.equal("cat");
 				expect(shebang[1]).to.match(/\\node_modules\\.bin\\with_shebang$/);
 			});
 		});
 
-		it('shebang without line break', function () {
+		it("shebang without line break", () => {
 			return testShebang(
-				'without_break',
-				'#!grep'
-			).then(function (shebang) {
+				"without_break",
+				"#!grep"
+			).then((shebang) => {
 				expect(shebang).to.have.length(2);
-				expect(shebang[0]).to.equal('grep');
+				expect(shebang[0]).to.equal("grep");
 				expect(shebang[1]).to.match(/\\without_break$/);
 			});
 		});
 
-		it('file without shebang', function () {
+		it("file without shebang", () => {
 			return testShebang(
-				'without_shebang',
-				'foo\nbar\n'
-			).then(function (shebang) {
+				"without_shebang",
+				"foo\nbar\n"
+			).then((shebang) => {
 				expect(shebang).to.be(null);
 			});
 		});
 
-		it('should use cache', function () {
-			var file = path.resolve(tempDir, 'cache');
+		it("should use cache", () => {
+			const file = path.resolve(tempDir, "cache");
 			return fs.writeFile(
 				file,
-				'#!mock'
-			).then(function () {
+				"#!mock"
+			).then(() => {
 				shebang(file);
 				return fs.unlink(file);
-			}).then(function () {
-				var cmd = shebang(file);
+			}).then(() => {
+				const cmd = shebang(file);
 				expect(cmd).to.have.length(2);
-				expect(cmd[0]).to.equal('mock');
+				expect(cmd[0]).to.equal("mock");
 				expect(cmd[1]).to.match(/\\cache$/);
 			});
 		});
 	});
 
-	describe('fix-spawn-args', function () {
-		var homeMockFile = path.join(os.homedir(), 'mock');
-		after(function () {
+	describe("fix-spawn-args", () => {
+		const homeMockFile = path.join(os.homedir(), "mock");
+		after(() => {
 			return fs.unlink(homeMockFile);
 		});
 
-		it('~/mock', function () {
-			return fs.writeFile(homeMockFile, '').then(function () {
-				var options = {
-					file: '~/mock',
+		it("~/mock", () => {
+			return fs.writeFile(homeMockFile, "").then(() => {
+				const options = {
+					file: "~/mock",
 					args: [],
 					envPairs: [],
 				};
@@ -122,47 +122,47 @@ describe('API', function () {
 			});
 		});
 
-		it('Custom HOME path', function () {
-			var options = {
-				file: '~/shell.cmd',
+		it("Custom HOME path", () => {
+			const options = {
+				file: "~/shell.cmd",
 				args: [],
 				envPairs: [
-					'HOME=' + path.resolve('bin'),
+					"HOME=" + path.resolve("bin"),
 				],
 			};
 			fixSpawnArgs(options);
-			expect(options.file).to.equal(path.resolve('bin/shell.cmd'));
+			expect(options.file).to.equal(path.resolve("bin/shell.cmd"));
 		});
 
-		it('bin/bash', function () {
-			var options = {
-				file: 'bin/shell',
+		it("bin/bash", () => {
+			const options = {
+				file: "bin/shell",
 				args: [],
 				envPairs: [
-					'PATHEXT=.CMD',
+					"PATHEXT=.CMD",
 				],
 			};
 			fixSpawnArgs(options);
-			expect(options.file).to.equal(path.resolve('bin/shell.cmd'));
+			expect(options.file).to.equal(path.resolve("bin/shell.cmd"));
 		});
-		it('ENOENT', function () {
-			var options = {
-				file: 'ENOENT',
+		it("ENOENT", () => {
+			const options = {
+				file: "ENOENT",
 				args: [],
 				envPairs: [],
 			};
 			fixSpawnArgs(options);
-			expect(options.file).to.equal('ENOENT');
+			expect(options.file).to.equal("ENOENT");
 		});
-		it('should not modify args', function () {
-			var options = {
-				file: '/bin/bash',
+		it("should not modify args", () => {
+			const options = {
+				file: "/bin/bash",
 				args: [
-					'bash',
-					'/d',
-					'/s',
-					'/c',
-					'file.sh',
+					"bash",
+					"/d",
+					"/s",
+					"/c",
+					"file.sh",
 				],
 				windowsVerbatimArguments: true,
 				envPairs: [
@@ -170,32 +170,32 @@ describe('API', function () {
 			};
 			fixSpawnArgs(options);
 			expect(options.args).have.length(3);
-			expect(options.args[0]).to.equal('bash');
-			expect(options.args[1]).to.equal('-c');
-			expect(options.args[2]).to.equal('file.sh');
+			expect(options.args[0]).to.equal("bash");
+			expect(options.args[1]).to.equal("-c");
+			expect(options.args[2]).to.equal("file.sh");
 		});
-		it('fixShellArgs', function () {
-			var options = {
-				file: 'bash',
+		it("fixShellArgs", () => {
+			const options = {
+				file: "bash",
 				args: [
-					'bash',
-					'--posix',
-					'file.sh',
+					"bash",
+					"--posix",
+					"file.sh",
 				],
 				envPairs: [
-					'mock',
+					"mock",
 				],
 			};
 			fixSpawnArgs(options);
-			expect(options.file).to.equal('bash');
+			expect(options.file).to.equal("bash");
 			expect(options.args).have.length(3);
-			expect(options.args[0]).to.equal('bash');
-			expect(options.args[1]).to.equal('--posix');
-			expect(options.args[2]).to.equal('file.sh');
+			expect(options.args[0]).to.equal("bash");
+			expect(options.args[1]).to.equal("--posix");
+			expect(options.args[2]).to.equal("file.sh");
 		});
-		it('pathStartsWith', function () {
-			expect(pathStartsWith('/foo/bar', '/foo')).to.equal('/bar');
-			expect(pathStartsWith('', '/foo')).to.not.ok();
+		it("pathStartsWith", () => {
+			expect(pathStartsWith("/foo/bar", "/foo")).to.equal("/bar");
+			expect(pathStartsWith("", "/foo")).to.not.ok();
 		});
 	});
 });

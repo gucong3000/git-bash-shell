@@ -1,25 +1,29 @@
 {
+	"parserOptions": {
+		"sourceType": "script",
+		"impliedStrict": false
+	},
 	"env": {
-		"browser": false,
 		"es6": true,
 		"node": true
 	},
 	"extends": [
-		"eslint:recommended",
 		"standard"
 	],
-	"parserOptions": {
-		"sourceType": "script",
-		"ecmaVersion": 2017
-	},
 	"root": true,
 	"rules": {
 		"comma-dangle": [
 			"error",
-			"always-multiline"
+			{
+				"arrays": "always-multiline",
+				"objects": "always-multiline",
+				"imports": "always-multiline",
+				"exports": "always-multiline",
+				"functions": "never"
+			}
 		],
 		"indent": [
-			"warn",
+			"error",
 			"tab",
 			{
 				"SwitchCase": 1
@@ -27,6 +31,19 @@
 		],
 		"no-tabs": [
 			"off"
+		],
+		"no-var": [
+			"error"
+		],
+		"prefer-arrow-callback": [
+			"error"
+		],
+		"prefer-const": [
+			"error"
+		],
+		"quotes": [
+			"error",
+			"double"
 		],
 		"semi": [
 			"error",
@@ -36,13 +53,8 @@
 			}
 		],
 		"strict": [
-			"error"
-		],
-		"valid-jsdoc": [
-			"warn",
-			{
-				"requireReturn": false
-			}
+			"error",
+			"safe"
 		]
 	},
 	"overrides": [
@@ -52,6 +64,9 @@
 			],
 			"env": {
 				"mocha": true
+			},
+			"rules": {
+				"no-template-curly-in-string": "off"
 			}
 		}
 	]
