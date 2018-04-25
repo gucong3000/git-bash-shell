@@ -1,13 +1,13 @@
 #!/usr/bin/env node.exe %NODE_OPTIONS% --require
-'use strict';
+"use strict";
 function init (force) {
-	if (process.platform === 'win32') {
-		require('./lib/patch');
-		require('./lib/env-lang');
-		require('./lib/env-path');
-		require('./lib/env-node-options');
+	if (process.platform === "win32") {
+		require("./lib/patch");
+		require("./lib/env-lang");
+		require("./lib/env-path");
+		require("./lib/env-node-options");
 		if (force) {
-			require('./lib/env-shell');
+			require("./lib/env-shell");
 		}
 	}
 }
