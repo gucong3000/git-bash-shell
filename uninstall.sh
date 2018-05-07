@@ -14,4 +14,3 @@ call :DEL sh.cmd
 call :DEL env.cmd
 call :DEL node.cmd
 call :DEL \$SHELL.cmd
-call :DEL bash
