@@ -7,7 +7,7 @@
   "dependencies": {
     "git-win": "^1.6.1",
     "lru-cache": "^4.1.2",
-    "string-argv": "0.0.2"
+    "string-argv": "0.1.1"
   },
   "devDependencies": {
     "codecov": "^3.0.1",
