@@ -57,7 +57,7 @@ describe("integration", () => {
 		return Promise.all([
 			exec("cat README.md"),
 			execFile("cat", ["README.md"]),
-			fs.readFile("README.md", {encoding: "utf8"}),
+			fs.readFile("README.md", { encoding: "utf8" }),
 		]).then((result) => {
 			expect(result[0][0]).to.equal(result[2]);
 			expect(result[1][0]).to.equal(result[2]);
