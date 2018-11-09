@@ -28,10 +28,10 @@ In your `package.json` file, you can add script prefix to compatible with Widnow
 
 ```json
 "scripts": {
-	"git:ls-files": "git ls-files > /tmp/git-files",
-	"lint:eslint": "eslint `grep \\.js$ /tmp/git-files`",
-	"lint:eclint": "eclint check `cat /tmp/git-files`",
-	"lint-flow": "env npm-run-all --parallel git:ls-files lint",
+  "git:ls-files": "git ls-files > /tmp/git-files",
+  "lint:eslint": "eslint `grep \\.js$ /tmp/git-files`",
+  "lint:eclint": "eclint check `cat /tmp/git-files`",
+  "lint-flow": "env npm-run-all --parallel git:ls-files lint",
 }
 ```
 just run `npm run lint-flow`, and all npm scripts will work under Windows
@@ -42,8 +42,8 @@ Node API:
 require('git-bash-shell')();
 const spawnSync = require('cross-spawn').sync;
 spawnSync('echo `git --version`', {
-	shell: true,
-	stdio: 'inherit',
+  shell: true,
+  stdio: 'inherit',
 });
 ```
 
