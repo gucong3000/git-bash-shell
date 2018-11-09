@@ -64,7 +64,7 @@
     "uninstall": "node lib/uninstall",
     "lint:eclint": "eclint check $(cat /tmp/git-files)",
     "lint:eslint": "eslint $(grep \"\\.js$\" /tmp/git-files)",
-    "pretest": "git ls-files | tee /tmp/git-files && env npm-run-all --parallel lint:*",
+    "pretest": "git ls-files | tee /tmp/git-files && env npm_config_script_shell=/bin/sh npm-run-all --parallel lint:*",
     "test": "nyc mocha --no-timeouts",
     "report-coverage": "codecov"
   },
