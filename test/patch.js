@@ -136,6 +136,7 @@ describe("fix-spawn-args", () => {
 		}
 		expect(result.error.code || result.error.errno).to.equal("ENOENT");
 	});
+
 	it("should fix shell args", () => {
 		const result = childProcess.spawnSync("/bin/sh", [
 			"/d",
@@ -156,15 +157,43 @@ describe("fix-spawn-args", () => {
 			expect(options.args[2]).to.equal("echo $SHELL");
 		}
 	});
+
 	it("echo", () => {
 		const result = childProcess.spawnSync("echo", [
 			"$SHELL",
 		], {
 			encoding: "utf8",
 		});
-		expect(result.stdout.trim()).to.equal("$SHELL");
 		expect(result.stdout).to.equal("$SHELL\n");
 	});
+
+	[
+		"curl",
+		"tar",
+		"bash",
+	].forEach(bin => {
+		const file = `C:/Windows/System32/${bin}.exe`;
+		if (fs.existsSync(file)) {
+			it(file, () => {
+				const result = childProcess.spawnSync(file, [
+					"--version",
+				], {
+					encoding: "utf8",
+				});
+				expect(result.stdout.trim()).to.contain(bin);
+			});
+		}
+	});
+	if (fs.existsSync("C:/Windows/System32/OpenSSH/ssh.exe")) {
+		it("C:/Windows/System32/OpenSSH/ssh.exe", () => {
+			const result = childProcess.spawnSync("C:/Windows/System32/OpenSSH/ssh.exe", [
+				"-v",
+			], {
+				encoding: "utf8",
+			});
+			expect(result.stderr.trim()).to.contain("usage: ssh ");
+		});
+	}
 });
 
 describe("node", () => {
