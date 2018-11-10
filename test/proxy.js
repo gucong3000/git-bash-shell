@@ -39,7 +39,7 @@ describe("proxy", () => {
 		expect(process.env.https_proxy).to.equal("http://mock.server.loacl:1080");
 	});
 
-	it("AroxyServer => part assign", async () => {
+	it("AroxyServer => do not part assign", async () => {
 		await reload({
 			ProxyEnable: 1,
 			ProxyServer: "mock.server.assign:1080",
@@ -48,7 +48,7 @@ describe("proxy", () => {
 			http_proxy: "http://mock.server.loacl:1080",
 		});
 		expect(process.env.http_proxy).to.equal("http://mock.server.loacl:1080");
-		expect(process.env.https_proxy).to.equal("http://mock.server.assign:1080");
+		expect(process.env.https_proxy).to.equal(undefined);
 	});
 
 	it("AroxyServer => ftp=mock.server.ftp:123;https=mock.server.https:123", async () => {
