@@ -5,10 +5,6 @@ const gitWin = require("git-win");
 const path = require("path");
 
 describe("which", () => {
-	before(() => {
-		require("../lib/env-path");
-	});
-
 	it("BASH", () => {
 		expect(which("BASH", {
 			env: {
@@ -57,5 +53,22 @@ describe("which", () => {
 
 	it("/Windows/system32/cmd.exe", () => {
 		expect(which("/Windows/system32/cmd.exe", { cwd: "C:\\" })).to.equal("C:\\Windows\\system32\\cmd.exe");
+	});
+
+	it(__filename, () => {
+		const file = __filename.replace(/\.\w+$/, "");
+		expect(which(file, { envPairs: ["PATHEXT=.JS"] })).to.equal(__filename);
+		expect(which(file, { env: { PATHEXT: ".JS" } })).to.equal(__filename);
+		expect(which(file, { envPairs: [""] })).to.equal(undefined);
+		expect(which(file, { env: {} })).to.equal(undefined);
+	});
+
+	it("git-bash-shell.cmd", () => {
+		const file = "git-bash-shell.cmd";
+		const dirname = path.resolve(__dirname, "../bin");
+		expect(which(file, { envPairs: ["PATH=" + dirname] })).to.equal(path.join(dirname, file));
+		expect(which(file, { envPairs: [] })).to.equal(undefined);
+		expect(which(file, { env: { PATH: dirname } })).to.equal(path.join(dirname, file));
+		expect(which(file, { env: { } })).to.equal(undefined);
 	});
 });
