@@ -1,7 +1,9 @@
 "use strict";
 const getEnvValue = require("../lib/get-env-value");
 const getPath = require("../lib/env-path");
+const path = require("path");
 const os = require("os");
+
 const expect = require("expect.js");
 
 describe("getEnvValue()", () => {
@@ -134,7 +136,7 @@ describe("getPath()", () => {
 					PATH: "~/bin;%HOME%\\bin",
 				},
 			}).join(";")
-		).to.equal("~/bin");
+		).to.equal(path.join(os.homedir(), "bin"));
 	});
 
 	it("PATH: \"%HOME%\\bin;~/bin\"", () => {
@@ -144,7 +146,7 @@ describe("getPath()", () => {
 					PATH: "%HOME%\\bin;~/bin",
 				},
 			}).join(";")
-		).to.equal("%HOME%\\bin");
+		).to.equal(path.join(os.homedir(), "bin"));
 	});
 
 	it("empty", () => {
