@@ -202,6 +202,7 @@ describe("node", () => {
 			encoding: "utf8",
 		});
 	}
+	const argPath = path.resolve(__dirname, "../");
 	it("normalize", () => {
 		const result = JSON.parse(runNode([
 			"-p",
@@ -209,18 +210,18 @@ describe("node", () => {
 		]).stdout);
 		expect(result).to.have.length(2);
 		expect(result[0]).to.equal("--require");
-		expect(result[1]).to.equal(require.resolve("../"));
+		expect(result[1]).to.equal(argPath);
 	});
-	it("run index.js", () => {
+	it("run " + path.resolve(__dirname, "../"), () => {
 		const result = JSON.parse(runNode([
 			"-r",
-			require.resolve("../"),
+			argPath,
 			"-p",
 			"JSON.stringify(process.execArgv.slice(0,-2))",
 		]).stdout);
 		expect(result).to.have.length(2);
 		expect(result[0]).to.equal("-r");
-		expect(result[1]).to.equal(require.resolve("../"));
+		expect(result[1]).to.equal(argPath);
 	});
 });
 
