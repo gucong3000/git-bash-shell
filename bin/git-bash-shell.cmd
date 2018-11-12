@@ -1,4 +1,3 @@
-;= @echo off
 ;= rem Call DOSKEY and use this file as the macrofile
 ;= if defined git_bash_shell_init ( goto:eof )
 ;= set git_bash_shell_init=true

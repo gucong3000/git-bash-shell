@@ -22,6 +22,7 @@ install:
 # to run your custom scripts instead of automatic tests
 test_script:
   - npm test
+  - bin\git-bash-shell.cmd
   - npm run postinstall
   - npm test
 
