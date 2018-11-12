@@ -1,6 +1,6 @@
 #!/usr/bin/sh
 set -o igncr; # cygwin encoding fix
-basedir=$(cygpath --mixed "$0" | xargs -0 dirname | xargs -0 dirname)
+basedir=$(cygpath --absolute --windows "$0\..\..")
 node.exe --require "$basedir" "$@"
 ret=$?
 exit $ret

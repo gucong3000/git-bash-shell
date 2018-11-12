@@ -25,7 +25,7 @@ describe("environment", () => {
 			gitWin.toPosix("/mingw00/bin"),
 		].forEach(dir => {
 			it(dir, () => {
-				expect(Path).to.contain(gitWin.toWin32(dir));
+				expect(Path).to.contain(gitWin.toWin32(dir).replace(/%.*?%/, (s) => process.env[s.slice(1, -1)]));
 			});
 		});
 	});
