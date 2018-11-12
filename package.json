@@ -6,7 +6,6 @@
   "description": "Use Git Bash as cross-platform shell for Windows",
   "dependencies": {
     "git-win": "^2.0.0",
-    "in-gfw": "^1.2.0",
     "lru-cache": "^4.1.3"
   },
   "devDependencies": {
