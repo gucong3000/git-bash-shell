@@ -206,22 +206,23 @@ describe("node", () => {
 	it("normalize", () => {
 		const result = JSON.parse(runNode([
 			"-p",
-			"JSON.stringify(process.execArgv.slice(0,-2))",
+			"JSON.stringify([process.execArgv, Object.keys(require.cache)])",
 		]).stdout);
-		expect(result).to.have.length(2);
-		expect(result[0]).to.equal("--require");
-		expect(result[1]).to.equal(argPath);
+		expect(result[0]).to.have.length(2);
+		expect(result[0]).to.not.contain("--require");
+		expect(result[1]).to.contain(require.resolve("../"));
 	});
 	it("run " + path.resolve(__dirname, "../"), () => {
 		const result = JSON.parse(runNode([
 			"-r",
 			argPath,
 			"-p",
-			"JSON.stringify(process.execArgv.slice(0,-2))",
+			"JSON.stringify(process.execArgv)",
 		]).stdout);
-		expect(result).to.have.length(2);
-		expect(result[0]).to.equal("-r");
-		expect(result[1]).to.equal(argPath);
+		expect(result).to.have.length(4);
+		expect(result).to.contain("-r");
+		expect(result).to.not.contain("--require");
+		expect(result).to.contain(argPath);
 	});
 });
 

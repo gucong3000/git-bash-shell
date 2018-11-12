@@ -19,3 +19,6 @@ function init (force) {
 init(process.env.SHELL && !/^(?:.*\\)?cmd(?:\.exe)?$/i.test(process.env.SHELL));
 
 module.exports = init.bind(null, true);
+if (!process.mainModule && process.execArgv[0] === "--require" && process.execArgv[1] === __dirname) {
+	process.execArgv = process.execArgv.slice(2);
+}
