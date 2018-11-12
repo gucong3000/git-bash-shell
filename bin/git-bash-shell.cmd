@@ -4,9 +4,11 @@
 ;= %SystemRoot%\System32\doskey.exe /listsize=1000 /macrofile=%0%
 ;= if not defined npm_execpath ( for /F "delims=" %%F in ('node.exe "%~dp0\..\lib\cli-environment.js"') do (%%F) )
 ;= set git_bash_shell_init=
-;= if defined npm_lifecycle_script ( goto:eof )
 ;= if defined CMDER_ROOT ( goto:eof )
-;= if exist "%ProgramData%\Cmder\vendor\clink\clink.bat" ( set "CMDER_ROOT=%ProgramData%\Cmder" && call "%ProgramData%\Cmder\vendor\clink\clink.bat" inject --autorun --quiet --profile "%ProgramData%\Cmder\config" --scripts "%ProgramData%\Cmder\vendor" )
+;= if defined npm_lifecycle_script ( goto:eof )
+;= if not exist "%ProgramData%\Cmder\vendor\clink\clink.bat" ( goto:eof )
+;= set "CMDER_ROOT=%ProgramData%\Cmder"
+;= call "%CMDER_ROOT%\vendor\clink\clink.bat" inject --autorun --quiet --profile "%CMDER_ROOT%\config" --scripts "%CMDER_ROOT%\vendor"
 ;= rem In batch mode, jump to the end of the file
 ;= goto:eof
 ;= Add aliases below here
