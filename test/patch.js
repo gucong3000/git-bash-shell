@@ -75,6 +75,7 @@ describe("fix-spawn-args", () => {
 	});
 
 	it("~/mock", async () => {
+		// delete process.env.SHELL;
 		delete process.env.HOME;
 		mockFile = path.join(os.homedir(), "git-bash-shell-home-mock.cmd");
 		await fs.writeFile(mockFile, "@echo %0");
