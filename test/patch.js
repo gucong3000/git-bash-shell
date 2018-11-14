@@ -252,14 +252,14 @@ describe("npm", () => {
 	});
 
 	it("echo %PATH%", () => {
-		const path = npmRun("echo %PATH%").stdout.trim().split(/(?:\s*;\s*)+/g);
+		const dirs = npmRun("echo %PATH%").stdout.trim().split(/(?:\s*;\s*)+/g).map(dir => path.resolve(dir));
 		[
 			"node_modules/.bin",
 			"/usr/bin",
 			"/bin",
 		].forEach(dir => {
-			expect(path).to.not.contain(dir);
-			expect(path).to.contain(gitWin.toWin32(dir));
+			expect(dirs).to.not.contain(dir);
+			expect(dirs).to.contain(path.resolve(gitWin.toWin32(dir)));
 		});
 	});
 

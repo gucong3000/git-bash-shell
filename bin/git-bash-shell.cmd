@@ -1,10 +1,8 @@
 ;= @echo off
-;= %SystemRoot%\System32\doskey.exe /listsize=1000 /macrofile=%0%
-;= if defined GIT_BASH_SHELL_LOCK ( goto:eof ) else ( set GIT_BASH_SHELL_LOCK=True )
-;= if defined TERM ( if defined SHLVL goto:eof )
-;= if defined npm_lifecycle_script goto:eof
+;= if defined GIT_BASH_SHELL_INIT goto:eof
+;= set GIT_BASH_SHELL_INIT=True
+;= "%SystemRoot%\System32\doskey.exe" /listsize=1000 /macrofile="%0%"
 ;= for /F "delims=" %%F in ('node.exe "%~dp0\..\lib\cli-environment.js"') do %%F
-;= set GIT_BASH_SHELL_LOCK=
 ;= goto:eof
 env=if defined SHELL ( env.exe $* ) else ( env.exe "SHELL=%GIT_INSTALL_ROOT%\bin\sh" env.exe $* )
 $SHELL=if defined SHELL ( env.exe "%SHELL%" $* ) else ( env.exe "SHELL=%GIT_INSTALL_ROOT%\bin\sh" /bin/bash $* )

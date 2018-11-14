@@ -58,7 +58,6 @@
   "scripts": {
     "preinstall": "(node -e \"require('util').promisify.call\" || node -e \"require('util.promisify')\") 2>nul || npm i util.promisify",
     "postinstall": "node lib/postinstall",
-    "uninstall": "node lib/uninstall",
     "lint:eclint": "eclint check $(git ls-files | tee /tmp/git-files)",
     "lint:eslint": "eslint $(grep \"\\.js$\" /tmp/git-files)",
     "pretest": "npm run lint:eclint && npm run lint:eslint",

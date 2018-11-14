@@ -1,6 +1,7 @@
 "use strict";
 const expect = require("expect.js");
 const gitWin = require("git-win");
+const path = require("path");
 require("../lib/env-value");
 
 describe("environment", () => {
@@ -9,7 +10,7 @@ describe("environment", () => {
 		before(() => {
 			delete require.cache[require.resolve("../lib/env-path")];
 			require("../lib/env-path");
-			Path = process.env.Path.split(/\s*;\s*/);
+			Path = process.env.Path.split(/\s*;\s*/).map(dir => path.resolve(dir)); ;
 		});
 
 		[
@@ -25,7 +26,7 @@ describe("environment", () => {
 			gitWin.toPosix("/mingw00/bin"),
 		].forEach(dir => {
 			it(dir, () => {
-				expect(Path).to.contain(gitWin.toWin32(dir).replace(/%.*?%/, (s) => process.env[s.slice(1, -1)]));
+				expect(Path).to.contain(path.resolve(gitWin.toWin32(dir).replace(/%.*?%/, (s) => process.env[s.slice(1, -1)])));
 			});
 		});
 	});
