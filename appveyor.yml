@@ -17,7 +17,7 @@ install:
   - ps: Install-Product node $env:nodejs_version $env:platform
   # install modules
   - npm install --git-version=2.19
-  - git --version
+  - echo %PATH%
   - env.exe --chdir=node_modules/nyc npm i https://github.com/gucong3000/spawn-wrap/archive/shebang-path-space.tar.gz --production
 
 # to run your custom scripts instead of automatic tests
