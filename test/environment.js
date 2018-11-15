@@ -14,16 +14,20 @@ describe("environment", () => {
 		});
 
 		[
-			"node_modules/.bin",
 			"~/bin",
-			"~/.local/bin",
-			"/usr/local/sbin",
-			"/usr/local/bin",
-			"/usr/sbin",
-			"/usr/bin",
-			"/sbin",
-			"/bin",
 			gitWin.toPosix("/mingw00/bin"),
+			"/usr/local/bin",
+			"/usr/bin",
+			"/bin",
+			"/usr/local/bin",
+			"/usr/local/sbin",
+			"/usr/bin",
+			"/usr/sbin",
+			"/bin",
+			"/sbin",
+			"node_modules/.bin",
+			"/usr/bin/vendor_perl",
+			"/usr/bin/core_perl",
 		].forEach(dir => {
 			it(dir, () => {
 				expect(Path).to.contain(path.resolve(gitWin.toWin32(dir).replace(/%.*?%/, (s) => process.env[s.slice(1, -1)])));
