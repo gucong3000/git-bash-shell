@@ -9,10 +9,7 @@ function init (force) {
 	}
 	return Promise.all([
 		require("./lib/patch"),
-		require("./lib/env-lang"),
-		require("./lib/env-path"),
 		require("./lib/env-value"),
-		require("./lib/env-proxy"),
 	]);
 }
 

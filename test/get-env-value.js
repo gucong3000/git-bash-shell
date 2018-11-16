@@ -1,7 +1,5 @@
 "use strict";
 const getEnvValue = require("../lib/get-env-value");
-const getPath = require("../lib/env-path");
-const path = require("path");
 const os = require("os");
 
 const expect = require("expect.js");
@@ -85,73 +83,5 @@ describe("getEnvValue()", () => {
 		expect(getEnvValue("NOT_EXIST", {
 			env: {},
 		})).to.equal(undefined);
-	});
-});
-
-describe("getPath()", () => {
-	it("path=mock", () => {
-		expect(
-			getPath({
-				envPairs: [
-					"PATH=mock",
-				],
-			}).join(";")
-		).to.equal("mock");
-	});
-
-	it("PATH: \"PATHmock\"", () => {
-		expect(
-			getPath({
-				env: {
-					PATH: "PATHmock",
-				},
-			}).join(";")
-		).to.equal("PATHmock");
-	});
-
-	it("PATH: \"PATHmock ; ; PATHmock\"", () => {
-		expect(
-			getPath({
-				env: {
-					PATH: "PATHmock ; ; PATHmock",
-				},
-			}).join(";")
-		).to.equal("PATHmock");
-	});
-
-	it("PATH: \"PATHmock;\"", () => {
-		expect(
-			getPath({
-				env: {
-					PATH: "PATHmock;",
-				},
-			}).join(";")
-		).to.equal("PATHmock");
-	});
-
-	it("PATH: \"~/bin;%HOME%\\bin\"", () => {
-		expect(
-			getPath({
-				env: {
-					PATH: "~/bin;%HOME%\\bin",
-				},
-			}).join(";")
-		).to.equal(path.join(os.homedir(), "bin"));
-	});
-
-	it("PATH: \"%HOME%\\bin;~/bin\"", () => {
-		expect(
-			getPath({
-				env: {
-					PATH: "%HOME%\\bin;~/bin",
-				},
-			}).join(";")
-		).to.equal(path.join(os.homedir(), "bin"));
-	});
-
-	it("empty", () => {
-		expect(
-			getPath({}).join(";")
-		).to.equal("");
 	});
 });
