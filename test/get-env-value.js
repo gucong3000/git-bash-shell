@@ -95,9 +95,7 @@ describe("getEnvValue()", () => {
 	});
 
 	it("not exist", () => {
-		expect(getEnvValue("NOT_EXIST", {
-			env: {},
-		})).to.equal(undefined);
+		expect(getEnvValue("NOT_EXIST", {})).to.equal(undefined);
 	});
 });
 
@@ -110,6 +108,13 @@ describe("PATH", () => {
 		process.env.PATH = "/bin";
 		process.env.PATH = PATH;
 	});
+
+	it("sort", () => {
+		const binDir = path.join(__dirname, "../bin");
+		process.env.PATH = "C:\\mock;" + binDir + ";";
+		expect(process.env.PATH).to.equal(binDir + ";C:\\mock;");
+	});
+
 	it("set posix PATH with `.`", () => {
 		process.env.PATH = [
 			"/mock/bin",
