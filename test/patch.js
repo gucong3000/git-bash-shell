@@ -203,7 +203,7 @@ describe("node", () => {
 			encoding: "utf8",
 		});
 	}
-	const argPath = path.resolve(__dirname, "../");
+	const argPath = path.join(__dirname, "..");
 	it("normalize", () => {
 		const result = JSON.parse(runNode([
 			"-p",

@@ -6,7 +6,7 @@ const childProcess = require("child_process");
 
 describe("integration", () => {
 	before(() => {
-		require("../")();
+		require("../src")();
 	});
 
 	it("env echo $SHELL", async () => {

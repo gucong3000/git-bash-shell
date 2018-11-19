@@ -5,9 +5,9 @@ const which = require("./which");
 const path = require("path");
 const gitWin = require("git-win");
 const envExec = which("/usr/bin/env");
-const nodeArg = path.resolve(__dirname, "../");
 const windir = getEnvValue("SystemRoot");
-const binDir = path.join(__dirname, "../bin");
+const rootDir = path.join(__dirname, "..");
+const binDir = path.join(rootDir, "bin");
 
 function isLifecycleScript (args, options) {
 	const script = getEnvValue("npm_lifecycle_script", options);
@@ -107,11 +107,11 @@ function fixSpawnArgs (options) {
 	}
 
 	if (file === process.execPath) {
-		if (options.args.indexOf(nodeArg) < 0) {
+		if (options.args.indexOf(rootDir) < 0) {
 			options.args.unshift(
 				options.args.shift(),
 				"--require",
-				nodeArg
+				rootDir
 			);
 		}
 		return;

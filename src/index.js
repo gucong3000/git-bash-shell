@@ -1,5 +1,6 @@
-#!/usr/bin/env node.exe
 "use strict";
+const path = require("path");
+
 function init (force) {
 	if (process.platform !== "win32") {
 		return;
@@ -8,14 +9,14 @@ function init (force) {
 		process.env.SHELL = "/bin/bash";
 	}
 	return Promise.all([
-		require("./lib/patch"),
-		require("./lib/env-value"),
+		require("./patch"),
+		require("./env-value"),
 	]);
 }
 
 init(process.env.SHELL && !/^(?:.*\\)?cmd(?:\.exe)?$/i.test(process.env.SHELL));
 
 module.exports = init.bind(null, true);
-if (!process.mainModule && process.execArgv[0] === "--require" && process.execArgv[1] === __dirname) {
+if (!process.mainModule && process.execArgv[0] === "--require" && process.execArgv[1] === path.join(__dirname, "..")) {
 	process.execArgv = process.execArgv.slice(2);
 }
