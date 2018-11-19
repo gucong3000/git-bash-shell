@@ -23,7 +23,7 @@ install:
 
 # to run your custom scripts instead of automatic tests
 test_script:
-  - env npm test --script-shell=/bin/sh
+  - npm test
 
 # to run your custom scripts instead of provider deployments
 after_test:
