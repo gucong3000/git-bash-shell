@@ -4,7 +4,6 @@
 ;= if defined TERM ( if defined SHLVL goto:eof )
 ;= set GIT_BASH_SHELL_INIT=True
 ;= @for /F "delims=" %%F in ('node.exe "%~dp0\..\lib\cli-environment.js"') do %%F
-;= if defined SHELL env.exe "%SHELL%" --login
 ;= "%windir%\System32\doskey.exe" /listsize=1000 /macrofile="%0%"
 ;= if not defined CMDER_ROOT goto:eof
 ;= if not exist "%CMDER_ROOT%\vendor\clink\clink_x64.exe" goto:eof
