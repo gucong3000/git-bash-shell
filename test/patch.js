@@ -5,7 +5,7 @@ const gitWin = require("git-win");
 const fs = require("fs-extra");
 const path = require("path");
 const os = require("os");
-require("../lib/patch");
+require("../src/patch");
 
 describe("env-value", () => {
 	it("SHELL=/bin/bash", async () => {

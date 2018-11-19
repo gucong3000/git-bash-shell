@@ -4,7 +4,7 @@ const childProcess = require("child_process");
 const gitWin = require("git-win");
 const path = require("path");
 
-require("../lib/patch");
+require("../src/patch");
 describe("env-value", () => {
 	before(() => {
 		delete process.env.npm_config_shell;

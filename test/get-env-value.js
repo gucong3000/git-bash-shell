@@ -1,5 +1,5 @@
 "use strict";
-const getEnvValue = require("../lib/get-env-value");
+const getEnvValue = require("../src/get-env-value");
 const gitWin = require("git-win");
 const path = require("path");
 const util = require("util");

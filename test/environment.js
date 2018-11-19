@@ -2,7 +2,7 @@
 const expect = require("expect.js");
 const gitWin = require("git-win");
 const path = require("path");
-require("../lib/env-value");
+require("../src/env-value");
 
 describe("environment", () => {
 	describe("env-path", () => {

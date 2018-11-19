@@ -16,12 +16,14 @@ install:
   # install Node.js
   - ps: Install-Product node $env:nodejs_version $env:platform
   # install modules
-  - npm install
+  - npm install --ignore-scripts
+  - npm run build
+  - npm run install
   - bash -c "cd node_modules/nyc && npm i https://github.com/gucong3000/spawn-wrap/archive/shebang-path-space.tar.gz --production"
 
 # to run your custom scripts instead of automatic tests
 test_script:
-  - npm test
+  - env npm test --script-shell=/bin/sh
 
 # to run your custom scripts instead of provider deployments
 after_test:
