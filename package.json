@@ -31,9 +31,11 @@
   "homepage": "https://github.com/gucong3000/git-bash-shell#readme",
   "keywords": [
     "child_process",
+    "terminal",
     "windows",
     "shell",
     "posix",
+    "cmder",
     "dash",
     "bash",
     "sh"

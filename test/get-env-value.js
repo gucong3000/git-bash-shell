@@ -1,5 +1,8 @@
 "use strict";
 const getEnvValue = require("../lib/get-env-value");
+const gitWin = require("git-win");
+const path = require("path");
+const util = require("util");
 const os = require("os");
 
 const expect = require("expect.js");
@@ -75,13 +78,71 @@ describe("getEnvValue()", () => {
 	it("get APPDATA by empty env", () => {
 		const APPDATA = process.env.APPDATA;
 		delete process.env.APPDATA;
-		expect(getEnvValue("APPDATA", {})).to.equal(APPDATA);
+		expect(getEnvValue("APPDATA", { env: {} })).to.equal(APPDATA);
 		process.env.APPDATA = APPDATA;
+	});
+
+	it("Ignore case by env", () => {
+		expect(getEnvValue("PaTh", { env: { PATH: "mock" } })).to.equal("mock");
+	});
+
+	it("Ignore case by envPairs", () => {
+		expect(getEnvValue("PaTh", {
+			envPairs: [
+				"PATH=mock",
+			],
+		})).to.equal("mock");
 	});
 
 	it("not exist", () => {
 		expect(getEnvValue("NOT_EXIST", {
 			env: {},
 		})).to.equal(undefined);
+	});
+});
+
+describe("PATH", () => {
+	let PATH;
+	before(() => {
+		PATH = process.env.PATH;
+	});
+	after(() => {
+		process.env.PATH = "/bin";
+		process.env.PATH = PATH;
+	});
+	it("set posix PATH with `.`", () => {
+		process.env.PATH = [
+			"/mock/bin",
+			".",
+			"/mock/perl",
+		].join(":");
+		process.env.PATH = "C:\\mock;";
+		expect(process.env.PATH).to.equal(gitWin.toWin32("/mock/bin") + ";C:\\mock;" + gitWin.toWin32("/mock/perl") + ";");
+	});
+
+	it("set posix PATH", () => {
+		process.env.PATH = [
+			"/mock/bin",
+			"/mock/usr/bin",
+		].join(":");
+		process.env.PATH = "C:\\mock";
+		expect(process.env.PATH).to.equal([
+			gitWin.toWin32("/mock/bin"),
+			gitWin.toWin32("/mock/usr/bin"),
+			"C:\\mock",
+		].join(";"));
+	});
+
+	it("home path", () => {
+		process.env.PATH = "~/bin";
+		process.env.PATH = "C:\\mock";
+		expect(process.env.PATH).to.equal([
+			path.join(os.homedir(), "bin"),
+			"C:\\mock",
+		].join(";"));
+	});
+
+	it("util.inspect", () => {
+		util.inspect(process.env);
 	});
 });
