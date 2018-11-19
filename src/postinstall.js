@@ -152,7 +152,7 @@ Promise.all([
 	getCmder(),
 	cmd(),
 ]).then(() => {
-	console.log("`git-bash-shell` installation was successful, please restart your shell!");
+	console.log("`git-bash-shell` installation was successful, please restart your terminal!");
 }, (error) => {
 	console.error(error);
 	process.exit(1);

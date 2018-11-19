@@ -21,8 +21,21 @@ Use Git Bash as cross-platform shell for Windows
 ```bash
 npm install --save git-bash-shell
 ```
+> Please restart your terminal after successful installation.
 
 ## Usage
+
+- npm config
+
+  These npm config items will be compatible under Windows:
+  - [shell](https://docs.npmjs.com/misc/config#shell)
+  - [script-shell](https://docs.npmjs.com/misc/config#script-shell)
+
+  You can edit [.npmrc](https://docs.npmjs.com/files/npmrc) to use a unified terminal:
+  ```ini
+    shell=/bin/bash
+    script-shell=/bin/sh
+  ```
 
 - `env` command
 
@@ -32,43 +45,25 @@ npm install --save git-bash-shell
     "posix": "env echo $SHELL",
   }
   ```
-  just run `npm run posix`, it will run for Windows and POSIX
+  Just run `npm run posix`, it will run for Windows and POSIX
 
-- npm config
-
-  These npm config items will be compatible under Windows:
-  - [shell](https://docs.npmjs.com/misc/config#shell)
-  - [script-shell](https://docs.npmjs.com/misc/config#script-shell)
-
-  You can edit [.npmrc](https://docs.npmjs.com/files/npmrc) to use a unified shell:
-  ```ini
-    shell=/bin/sh
-    script-shell=/bin/sh
-  ```
 
 - Node API:
 
-```javascript
-await require('git-bash-shell')();
-const spawnSync = require('cross-spawn').sync;
-spawnSync('echo `git --version`', {
-  shell: true,
-  stdio: 'inherit',
-});
-```
+  ```javascript
+  await require('git-bash-shell')();
+  const spawnSync = require('cross-spawn').sync;
+  spawnSync('echo $(git --version)', {
+    shell: '/bin/sh',
+    stdio: 'inherit',
+  });
+  ```
 
 ## Environment Variables
 
 ### SHELL
 
-- Default: `/bin/bash`
+- Default: `/bin/sh`
 - Type: path
 
 POSIX specific implementations of shell path.
-
-### HOME
-
-- Default: `%USERPROFILE%`
-- Type: path
-
-Directory path of `~/`
