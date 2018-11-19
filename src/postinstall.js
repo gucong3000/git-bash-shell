@@ -1,14 +1,12 @@
 "use strict";
 const spawn = require("./spawn");
-const which = require("./which");
 const reg = require("./reg");
 const gitWin = require("git-win");
 const path = require("path");
 const url = require("url");
 const fs = require("fs");
-const os = require("os");
 const promisify = (require("util").promisify || require("util.promisify"));
-const curl = which(`/${gitWin.mingw}/bin/curl`) || "curl.exe";
+const curl = gitWin.toWin32("/mingw00/bin/curl.exe");
 
 async function autoRun () {
 	const cmdPath = path.normalize((/[\\/]node_modules[\\/]/i.test(__dirname) ? "node_modules/git-bash-shell/" : "") + "bin/git-bash-shell.cmd");
@@ -79,7 +77,7 @@ async function downCmder (releaseUrl, zipFile) {
 		"--continue-at",
 		"-",
 		"--output",
-		zipFile,
+		gitWin.toWin32(zipFile),
 		zipUrl,
 	], {
 		argv0: "curl",
@@ -97,8 +95,8 @@ async function getCmder () {
 	const cmderDir = path.join(process.env.ProgramData, "Cmder");
 
 	if (!await checkCmder(cmderDir, cmderVer)) {
-		const unzip = which("/usr/bin/unzip");
-		const zipFile = path.join(process.env.npm_config_tmp || os.tmpdir(), `cmder_mini_v${cmderVer}.zip`);
+		const unzip = gitWin.toWin32("/usr/bin/unzip.exe");
+		const zipFile = `/tmp/cmder_mini_v${cmderVer}.zip`;
 
 		try {
 			await spawn([
@@ -147,13 +145,13 @@ async function cmd () {
 	await promisify(fs.writeFile)(cmdFile, cmd);
 }
 
-Promise.all([
+module.exports = Promise.all([
 	autoRun(),
 	getCmder(),
 	cmd(),
 ]).then(() => {
 	console.log("`git-bash-shell` installation was successful, please restart your terminal!");
 }, (error) => {
-	console.error(error);
-	process.exit(1);
+	console.error(error.stack || error);
+	process.exitCode = 1;
 });
