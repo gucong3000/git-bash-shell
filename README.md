@@ -21,61 +21,49 @@ Use Git Bash as cross-platform shell for Windows
 ```bash
 npm install --save git-bash-shell
 ```
+> Please restart your terminal after successful installation.
 
 ## Usage
 
-In your `package.json` file, you can add script prefix to compatible with Widnows: `env`, `bash`, `sh`, `dash` or `$SHELL`.
+- npm config
 
-```json
-"scripts": {
-  "git:ls-files": "git ls-files > /tmp/git-files",
-  "lint:eslint": "eslint `grep \\.js$ /tmp/git-files`",
-  "lint:eclint": "eclint check `cat /tmp/git-files`",
-  "lint-flow": "env npm-run-all --parallel git:ls-files lint",
-}
-```
-just run `npm run lint-flow`, and all npm scripts will work under Windows
+  These npm config items will be compatible under Windows:
+  - [shell](https://docs.npmjs.com/misc/config#shell)
+  - [script-shell](https://docs.npmjs.com/misc/config#script-shell)
 
-Node API:
+  You can edit [.npmrc](https://docs.npmjs.com/files/npmrc) to use a unified terminal:
+  ```ini
+    shell=/bin/bash
+    script-shell=/bin/sh
+  ```
 
-```javascript
-require('git-bash-shell')();
-const spawnSync = require('cross-spawn').sync;
-spawnSync('echo `git --version`', {
-  shell: true,
-  stdio: 'inherit',
-});
-```
+- `env` command
+
+  In your `package.json` file, you can add script prefix `env` to compatible with Widnows:
+  ```json
+  "scripts": {
+    "posix": "env echo $SHELL",
+  }
+  ```
+  Just run `npm run posix`, it will run for Windows and POSIX
+
+
+- Node API:
+
+  ```javascript
+  await require('git-bash-shell')();
+  const spawnSync = require('cross-spawn').sync;
+  spawnSync('echo $(git --version)', {
+    shell: '/bin/sh',
+    stdio: 'inherit',
+  });
+  ```
 
 ## Environment Variables
 
 ### SHELL
 
-- Default: `/usr/bin/bash`
+- Default: `/bin/sh`
 - Type: path
 
 POSIX specific implementations of shell path.
-
-### ComSpec
-
-- Default: `%ProgramFiles%\Git\usr\bin\bash.exe`
-- Type: path
-
-The shell to use for scripts run with the npm run command.
-If you want to turn off SHELL feature, assign assign environment variable to `cmd.exe`
-
-
-### PATHEXT
-
-- Default: `%PATHEXT%`
-- Type: path list
-
-';'-separated list of suffix to executable file search.
-If you want to turn off PATHEXT feature, just empty this environment variable
-
-### HOME
-
-- Default: `%USERPROFILE%`
-- Type: path
-
-Directory path of `~/`

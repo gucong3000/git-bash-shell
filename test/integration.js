@@ -1,94 +1,117 @@
 "use strict";
-const fs = require("mz/fs");
-const path = require("path");
-const execFile = require("mz/child_process").execFile;
-const exec = require("mz/child_process").exec;
+const fs = require("fs-extra");
 const expect = require("expect.js");
+const spawn = require("../src/spawn");
+const childProcess = require("child_process");
 
 describe("integration", () => {
 	before(() => {
-		const root = path.resolve("lib");
-		for (const file in require.cache) {
-			if (file.startsWith(root)) {
-				delete require.cache[file];
+		require("../src")();
+	});
+
+	it("env echo $SHELL", async () => {
+		process.env.SHELL = "/bin/dash";
+		const result = childProcess.execSync("echo $SHELL", {
+			encoding: "utf8",
+		});
+		expect(result.trim()).to.be.equal("/bin/dash");
+	});
+
+	it("/bin/bash", async () => {
+		const result = await spawn(
+			[
+				"/bin/bash",
+				"-c",
+				"echo hello",
+			],
+			{
+				encoding: "utf8",
 			}
+		);
+		expect(result.trim()).to.be.equal("hello");
+	});
+
+	it("sh", async () => {
+		const result = await spawn(
+			[
+				"sh",
+				"-c",
+				"echo hello",
+			],
+			{
+				encoding: "utf8",
+			}
+		);
+		expect(result.trim()).to.be.equal("hello");
+	});
+
+	it("ls", async () => {
+		let result = await spawn(
+			[
+				"ls",
+			],
+			{
+				encoding: "utf8",
+			}
+		);
+		result = result.split(/\r?\n/).filter(Boolean).sort();
+		expect(result).to.contain("package.json");
+		expect(result).to.contain("README.md");
+	});
+	it("cat README.md", async () => {
+		const result = await spawn(
+			[
+				"cat",
+				"README.md",
+			],
+			{
+				encoding: "utf8",
+			}
+		);
+		const contents = await fs.readFile("README.md", { encoding: "utf8" });
+		expect(result).to.equal(contents);
+	});
+	it("zdiff --help", async () => {
+		const result = await spawn(
+			[
+				"/usr/bin/zdiff",
+				"--help",
+			],
+			{
+				encoding: "utf8",
+			}
+		);
+
+		expect(result).to.contain("/usr/bin/zdiff [OPTION]... FILE1 [FILE2]");
+		expect(result).to.contain("OPTIONs are the same as for");
+	});
+	it("eslint --help", async () => {
+		const result = await spawn(
+			[
+				"node_modules/.bin/eslint",
+				"--help",
+			],
+			{
+				encoding: "utf8",
+			}
+		);
+		expect(result).to.contain("Basic configuration:");
+	});
+
+	it(process.env.windir, async () => {
+		let result;
+		try {
+			result = await spawn(
+				[
+					process.env.windir,
+				],
+				{
+					encoding: "utf8",
+				}
+			);
+		} catch (ex) {
+			//
 		}
-		delete require.cache[require.resolve("../")];
-		process.env.SHELL = "";
-		require("../")();
-	});
-
-	it("node.cmd", () => {
-		return execFile("node_modules\\.bin\\node.cmd", [
-			"-p",
-			"process.env.SHELL",
-		], {
-			shell: "cmd.exe",
-		}).then((result) => {
-			expect(result[0].trim()).to.be.equal("/usr/bin/bash");
-		});
-	});
-
-	it("/bin/bash", () => {
-		return execFile("/bin/bash", [
-			"-c",
-			"echo hello",
-		]).then((result) => {
-			expect(result[0].trim()).to.equal("hello");
-		});
-	});
-
-	it("/bin/sh", () => {
-		return execFile("/bin/bash", [
-			"-c",
-			"echo hello",
-		]).then((result) => {
-			expect(result[0].trim()).to.equal("hello");
-		});
-	});
-	it("ls", () => {
-		return execFile("ls").then((result) => {
-			result = result[0].split(/\r?\n/).filter(Boolean).sort();
-			expect(result).to.contain("package.json");
-			expect(result).to.contain("README.md");
-		});
-	});
-	it("cat README.md", () => {
-		return Promise.all([
-			exec("cat README.md"),
-			execFile("cat", ["README.md"]),
-			fs.readFile("README.md", { encoding: "utf8" }),
-		]).then((result) => {
-			expect(result[0][0]).to.equal(result[2]);
-			expect(result[1][0]).to.equal(result[2]);
-		});
-	});
-	it("zdiff --help", () => {
-		return Promise.all([
-			exec("zdiff --help"),
-			execFile("zdiff", ["--help"]),
-		]).then((result) => {
-			expect(result[0][0]).to.contain("OPTIONs are the same as for");
-			expect(result[0][0]).to.be.equal(result[1][0]);
-		});
-	});
-	it("eslint --help", () => {
-		const env = Object.assign({}, process.env, {
-			PATH: [
-				"node_modules/.bin",
-				process.env.PATH,
-			].join(";"),
-		});
-		return Promise.all([
-			exec("eslint --help", {
-				env: env,
-			}),
-			execFile("eslint", ["--help"], {
-				env: env,
-			}),
-		]).then((result) => {
-			expect(result[0][0]).to.contain("Basic configuration:");
-			expect(result[0][0]).to.be.equal(result[1][0]);
-		});
+		expect(result).to.not.ok();
 	});
 });
