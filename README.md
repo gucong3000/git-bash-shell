@@ -10,60 +10,64 @@ Use Git Bash as cross-platform shell for Windows
 
 ## Why
 
-- Use Git [Bash](https://en.wikipedia.org/wiki/Bash_(Unix_shell)) as cross-platform shell for child process or [npm run scripts](https://docs.npmjs.com/cli/run-script).
-- Support [POSIX](https://en.wikipedia.org/wiki/POSIX) file path.
-- Support [Shebang](https://en.wikipedia.org/wiki/Shebang_(Unix))
-- Support [PATHEXT](https://github.com/joyent/node/issues/2318)
-- Support [Shell script](https://en.wikipedia.org/wiki/Shell_script)
+- Inject Bash or [Cmder](http://cmder.net/) to Windows shell `cmd.exe`.
+- Add [POSIX](https://en.wikipedia.org/wiki/POSIX) style features for Node child process:
+  - Add [Shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) support for executable file.
+  - Add POSIX style path support for executable file and `options.shell`.
+  - Support for environment variable [PATHEXT](https://github.com/joyent/node/issues/2318).
+- Add [POSIX](https://en.wikipedia.org/wiki/POSIX) style path support for Node file system.
+  - POSIX style root path will be convert to Git install directory.
+  - Support for [the Cygwin mount table](https://cygwin.com/cygwin-ug-net/using.html#mount-table).
+  - Support for [The cygdrive path prefix](https://cygwin.com/cygwin-ug-net/using.html#cygdrive).
+- Add POSIX style path support for these npm config items:
+  - [shell](https://docs.npmjs.com/misc/config#shell)
+  - [script-shell](https://docs.npmjs.com/misc/config#script-shell)
 
 ## Install
 
 ```bash
-npm install --save git-bash-shell
+npm install git-bash-shell --global
+exit 0
 ```
-> Please restart your terminal after successful installation.
+> Please restart your terminal after install.
+> If Node version < 8, please install [util.promisify](https://www.npmjs.com/package/util.promisify)
 
 ## Usage
 
-- npm config
+### `env` command
 
-  These npm config items will be compatible under Windows:
-  - [shell](https://docs.npmjs.com/misc/config#shell)
-  - [script-shell](https://docs.npmjs.com/misc/config#script-shell)
+Add `env` as a prefix for command in terminal or [npm package scripts](https://docs.npmjs.com/cli/run-script.html)
+```json
+// package.json
+"scripts": {
+  "show-shell": "env echo $SHELL",
+}
+```
 
-  You can edit [.npmrc](https://docs.npmjs.com/files/npmrc) to use a unified terminal:
-  ```ini
-    shell=/bin/bash
-    script-shell=/bin/sh
-  ```
+### Node API
 
-- `env` command
+```javascript
+require('git-bash-shell');
+const spawnSync = require('cross-spawn').sync;
+spawnSync('echo $(git --version)', {
+  shell: '/bin/sh',
+  stdio: 'inherit',
+});
+```
+### npm config
 
-  In your `package.json` file, you can add script prefix `env` to compatible with Widnows:
-  ```json
-  "scripts": {
-    "posix": "env echo $SHELL",
-  }
-  ```
-  Just run `npm run posix`, it will run for Windows and POSIX
+You can update config by command:
+```bash
+npm config set shell /bin/bash
+npm config set script-shell /bin/sh
+```
+Or edit [.npmrc](https://docs.npmjs.com/files/npmrc) file in directory of `package.json`:
+```bash
+echo shell=/bin/bash>>.npmrc
+echo script-shell=/bin/sh>>.npmrc
+```
 
+## Default Shell
 
-- Node API:
-
-  ```javascript
-  await require('git-bash-shell')();
-  const spawnSync = require('cross-spawn').sync;
-  spawnSync('echo $(git --version)', {
-    shell: '/bin/sh',
-    stdio: 'inherit',
-  });
-  ```
-
-## Environment Variables
-
-### SHELL
-
-- Default: `/bin/sh`
-- Type: path
-
-POSIX specific implementations of shell path.
+- When `options.shell` set to `true` for child process, `process.env.SHELL` will be used, `process.env.ComSpec` is used as a fallback if `process.env.SHELL` is unavailable.
+- When a npm config value set to [shell](https://docs.npmjs.com/misc/config#shell), it will inject to `cmd.exe`

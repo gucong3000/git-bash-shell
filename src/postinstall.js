@@ -5,7 +5,7 @@ const gitWin = require("git-win");
 const path = require("path");
 const url = require("url");
 const fs = require("fs");
-const promisify = (require("util").promisify || require("util.promisify"));
+const promisify = require("util").promisify || require("util.promisify");
 const curl = gitWin.toWin32("/mingw00/bin/curl.exe");
 
 async function autoRun () {
@@ -90,6 +90,9 @@ async function downCmder (releaseUrl, zipFile) {
 }
 
 async function getCmder () {
+	if (process.env.CI) {
+		return;
+	}
 	const releaseUrl = await getLocation("https://github.com/cmderdev/cmder/releases/latest");
 	const cmderVer = /\/v*([^/\\]+?)$/.exec(releaseUrl)[1];
 	const cmderDir = path.join(process.env.ProgramData, "Cmder");

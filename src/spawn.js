@@ -18,7 +18,7 @@ function stdio (stdio, options) {
 }
 
 function spawn (commands, options = {}) {
-	const child = childProcess.spawn(commands.shift(), commands, options);
+	const child = childProcess.spawn(commands.shift(), commands.filter(Boolean), options);
 	if (options.echo) {
 		console.log(">", child.spawnargs.join(" "));
 	}
