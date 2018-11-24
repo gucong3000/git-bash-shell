@@ -1,10 +1,10 @@
 "use strict";
-const promisify = require("util").promisify || require("util.promisify");
 const spawn = require("./spawn");
 const gitWin = require("git-win");
 const path = require("path");
 const fs = require("fs");
 const os = require("os");
+const promisify = require("util").promisify || require("util.promisify");
 const binDir = path.join(__dirname, "../bin");
 require("./env-value");
 

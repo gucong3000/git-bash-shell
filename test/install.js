@@ -6,11 +6,19 @@ const reg = require("../src/reg");
 const expect = require("expect.js");
 const path = require("path");
 
-require("../src/")();
-
 describe("install", () => {
+	let CI;
+	before(() => {
+		CI = process.env.CI;
+		require("../src/")();
+	});
 	beforeEach(() => {
 		delete require.cache[install];
+	});
+	afterEach(() => {
+		if (CI) {
+			process.env.CI = CI;
+		}
 	});
 
 	it("Add reg", async () => {
@@ -19,7 +27,8 @@ describe("install", () => {
 		expect((await reg.query("HKCU/Software/Microsoft/Command Processor")).AutoRun).to.contain("%APPDATA%\\npm\\");
 	});
 
-	it("download and install Cmder", async () => {
+	(CI ? it : it.skip)("download and install Cmder", async () => {
+		delete process.env.CI;
 		await spawn([
 			"rm",
 			"-rf",
@@ -33,6 +42,7 @@ describe("install", () => {
 	});
 
 	it("install Cmder without download", async () => {
+		delete process.env.CI;
 		await spawn([
 			"rm",
 			"-rf",
@@ -43,6 +53,7 @@ describe("install", () => {
 	});
 
 	it("reinstalll", async () => {
+		delete process.env.CI;
 		await require(install);
 		expect(await fs.exists(path.join(process.env.ProgramData, "Cmder/vendor/clink/clink.bat"))).to.equal(true);
 	});

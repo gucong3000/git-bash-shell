@@ -6,7 +6,8 @@
   "description": "Use Git Bash as cross-platform shell for Windows",
   "dependencies": {
     "@babel/runtime": "^7.1.5",
-    "git-win": "^2.1.0",
+    "fs-posix": "^5.0.0",
+    "git-win": "^2.2.3",
     "lru-cache": "^5.1.1"
   },
   "devDependencies": {
@@ -64,7 +65,6 @@
     "url": "git+https://github.com/gucong3000/git-bash-shell.git"
   },
   "scripts": {
-    "preinstall": "(node -e \"require('util').promisify.call\" || node -e \"require('util.promisify')\") 2>nul || npm i util.promisify",
     "postinstall": "node lib/postinstall",
     "build": "babel src --out-dir lib",
     "prepare": "npm run build",
@@ -74,5 +74,5 @@
     "test": "nyc mocha --no-timeouts",
     "report-coverage": "codecov"
   },
-  "version": "2.0.0"
+  "version": "2.1.0"
 }

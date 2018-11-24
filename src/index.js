@@ -8,10 +8,9 @@ function init (force) {
 	if (force && !process.env.SHELL) {
 		process.env.SHELL = "/bin/bash";
 	}
-	return Promise.all([
-		require("./patch"),
-		require("./env-value"),
-	]);
+	require("./patch");
+	require("./env-value");
+	require("fs-posix");
 }
 
 init(process.env.SHELL && !/^(?:.*\\)?cmd(?:\.exe)?$/i.test(process.env.SHELL));
