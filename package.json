@@ -6,7 +6,7 @@
   "description": "Use Git Bash as cross-platform shell for Windows",
   "dependencies": {
     "@babel/runtime": "^7.1.5",
-    "fs-posix": "^5.0.0",
+    "fs-posix": "^6.0.0",
     "git-win": "^2.2.3",
     "lru-cache": "^5.1.1"
   },
