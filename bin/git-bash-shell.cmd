@@ -9,6 +9,10 @@
 ;= if not exist "%CMDER_ROOT%\vendor\clink\clink_x64.exe" goto:eof
 ;= "%CMDER_ROOT%\vendor\clink\clink_x64.exe" inject --autorun --quiet --profile "%CMDER_ROOT%\config" --scripts "%CMDER_ROOT%\vendor"
 ;= goto:eof
+ll=ls -l $*
+ls=ls -F --color=auto --show-control-chars $*
+swi=sudo winpty $*
+wi=winpty $*
 $SHELL=if defined SHELL ( env.exe "%SHELL%" $* ) else ( env.exe "SHELL=%GIT_INSTALL_ROOT%\bin\sh" /bin/sh $* )
 env=if defined SHELL ( env.exe $* ) else ( env.exe "SHELL=%GIT_INSTALL_ROOT%\bin\sh" env.exe $* )
 dash=env.exe "SHELL=%GIT_INSTALL_ROOT%\usr\bin\dash" /usr/bin/dash $*
