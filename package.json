@@ -3,11 +3,12 @@
   "bugs": {
     "url": "https://github.com/gucong3000/git-bash-shell/issues"
   },
+  "bin": "./bin/git-bash-shell.cmd",
   "description": "Use Git Bash as cross-platform shell for Windows",
   "dependencies": {
     "@babel/runtime": "^7.1.5",
-    "fs-posix": "^5.0.0",
-    "git-win": "^2.2.3",
+    "fs-posix": "^6.0.0",
+    "git-win": "^2.2.4",
     "lru-cache": "^5.1.1"
   },
   "devDependencies": {
@@ -74,5 +75,5 @@
     "test": "nyc mocha --no-timeouts",
     "report-coverage": "codecov"
   },
-  "version": "2.1.0"
+  "version": "2.2.0"
 }

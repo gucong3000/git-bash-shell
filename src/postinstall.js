@@ -9,15 +9,15 @@ const promisify = require("util").promisify || require("util.promisify");
 const curl = gitWin.toWin32("/mingw00/bin/curl.exe");
 
 async function autoRun () {
-	const cmdPath = path.normalize((/[\\/]node_modules[\\/]/i.test(__dirname) ? "node_modules/git-bash-shell/" : "") + "bin/git-bash-shell.cmd");
+	const cmdPath = path.join(/[\\/]node_modules[\\/]/i.test(__dirname) ? "node_modules/.bin" : "bin", "git-bash-shell.cmd");
 	// return reg.add(`HK${isAdmin ? "LM" : "CU"}/Software/Microsoft/Command Processor`, {
 	return reg.add("HKCU/Software/Microsoft/Command Processor", {
 		AutoRun: `
 			if exist ${cmdPath} (
 				call ${cmdPath}
 			) else (
-				if exist "%APPDATA%\\npm\\${cmdPath}" (
-					call "%APPDATA%\\npm\\${cmdPath}"
+				if exist "%APPDATA%\\npm\\git-bash-shell.cmd" (
+					call "%APPDATA%\\npm\\git-bash-shell.cmd"
 				) else (
 					DOSKEY cd=cd /d $* ^&^& if exist ${cmdPath} call ${cmdPath}
 				)
@@ -71,6 +71,7 @@ async function downCmder (releaseUrl, zipFile) {
 
 	await spawn([
 		curl,
+		"--fail",
 		"--insecure",
 		"--location",
 		"--remote-time",

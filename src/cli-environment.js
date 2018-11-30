@@ -15,6 +15,44 @@ function set (key, value) {
 	}
 }
 
+const defaultAlias = {
+	"ll": "ls -l $*",
+	"ls": "ls -F --color=auto --show-control-chars $*",
+	"swi": "sudo winpty $*",
+	"wi": "winpty $*",
+};
+
+async function updateAlias (alias) {
+	const aliaKeys = Object.keys(alias);
+	if (!aliaKeys.length) {
+		return;
+	}
+	/*
+	const fileName = path.join(__dirname, "../bin/git-bash-shell.cmd");
+	const rawCmds = await promisify(fs.readFile)(fileName, "utf8");
+	const newAlias = Object.assign({}, defaultAlias, alias);
+	const newCmds = (rawCmds).split(/[\r\n]+/g).filter(line => line[0] === ";").concat(
+		Object.keys(newAlias).map(key => `${key}=${newAlias[key]}`),
+		""
+	).join("\r\n");
+
+	if (rawCmds === newCmds) {
+		return;
+	}
+
+	try {
+		await promisify(fs.writeFile)(fileName, newCmds);
+		return;
+	} catch (ex) {
+		//
+	}
+	*/
+	const doskey = `"${path.join(process.env.windir || process.env.SystemRoot, "System32/doskey.exe")}"`;
+	console.log(
+		aliaKeys.map(key => `${doskey} ${key}=${alias[key]}`).join("\r\n")
+	);
+}
+
 async function login () {
 	const envPath = gitWin.toWin32("/usr/bin/env.exe");
 	if (process.env.SHELL) {
@@ -30,13 +68,14 @@ async function login () {
 		process.env.SHELL || "/bin/bash",
 		"--login",
 		"-c",
-		"env",
+		"env && alias -p",
 	], {
 		env: {
 			MSYSTEM: gitWin.mingw.toUpperCase(),
 		},
 		encoding: "utf8",
 	});
+	const alias = {};
 	env.split(/[\r\n]+/g).forEach(env => {
 		if (!env || /^(?:!.+|_|(?:ORIGINAL|MSYSTEM|MINGW)(?:_.+)?|HOME|PWD|SHELL|TERM|PS1|SHLVL|SYSTEMROOT|WINDIR)=/i.test(env) || /=\/mingw\d+(?=\/|$)/.test(env)) {
 			return;
@@ -45,9 +84,17 @@ async function login () {
 			process.env.PATH = env.replace(new RegExp("(^|:)" + HOME + "(?=/|:|$)", "g"), "$1~");
 			set("PATH");
 			return;
+		} else if (/^alias\s+(.*?)\s*=\s*(['"])?(.*)\2$/.test(env)) {
+			const key = RegExp.$1;
+			const value = RegExp.$3.replace(/\s*$/, " $*");
+			if (!defaultAlias[key] || defaultAlias[key] !== value) {
+				alias[key] = value;
+			}
+			return;
 		}
 		console.log(`set "${env}"`);
 	});
+	await updateAlias(alias);
 }
 
 async function npmrc () {
