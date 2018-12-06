@@ -5,7 +5,7 @@ build: off
 
 environment:
   matrix:
-    - nodejs_version: stable
+    - nodejs_version: current
     - nodejs_version: lts
 
 platform:
@@ -18,7 +18,7 @@ install:
   # install modules
   - npm install --ignore-scripts
   - npm run build
-  - npm install
+  - npm run install
   - bash -c "cd node_modules/nyc && npm i https://github.com/gucong3000/spawn-wrap/archive/shebang-path-space.tar.gz --production"
 
 # to run your custom scripts instead of automatic tests

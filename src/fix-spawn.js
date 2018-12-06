@@ -1,9 +1,12 @@
 "use strict";
 const getEnvValue = require("./get-env-value");
 const rawEnv = require("./env-value");
+const stdio = require("./stdio");
 const which = require("./which");
-const path = require("path");
 const gitWin = require("git-win");
+const path = require("path");
+const ChildProcess = require("child_process").ChildProcess;
+
 const envExec = which("/usr/bin/env");
 const windir = getEnvValue("SystemRoot");
 const rootDir = path.join(__dirname, "..");
@@ -121,12 +124,15 @@ function fixSpawnArgs (options) {
 		return;
 	}
 
+	let result;
+
 	if (/\.(?:exe|cmd|bat|com)$/.test(file)) {
 		if (isWinExec(file)) {
 			const argv0 = path.normalize(options.args[0]);
 			options.args[0] = argv0.replace(/^~(?=[/\\]|$)/, () => (
 				file.slice(0, file.indexOf(argv0.slice(1)))
 			));
+			result = true;
 		}
 	} else {
 		options.file = envExec;
@@ -134,6 +140,16 @@ function fixSpawnArgs (options) {
 		return;
 	}
 	options.file = file;
+	return result || false;
 }
 
-module.exports = fixSpawnArgs;
+function fixSpawn (oldFn, args) {
+	const isWinExec = fixSpawnArgs.apply(this, args);
+	const result = oldFn.apply(this, args);
+	if ((isWinExec || args[0].windowsVerbatimArguments) && !/(^|\\|\/)cmd(?:\.exe)?$/i.test(args[0].file)) {
+		stdio.apply(this instanceof ChildProcess ? this : result, args);
+	}
+	return result;
+}
+
+module.exports = fixSpawn;

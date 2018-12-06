@@ -1,5 +1,5 @@
 "use strict";
-const install = require.resolve("../src/postinstall");
+const install = require.resolve("../src/install");
 const fs = require("fs-extra");
 const spawn = require("../src/spawn");
 const reg = require("../src/reg");
