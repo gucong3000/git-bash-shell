@@ -1,42 +1,7 @@
 {
-  "author": "gucong3000",
-  "bugs": {
-    "url": "https://github.com/gucong3000/git-bash-shell/issues"
-  },
-  "bin": "./bin/git-bash-shell.cmd",
+  "name": "git-bash-shell",
+  "version": "2.3.0",
   "description": "Use Git Bash as cross-platform shell for Windows",
-  "dependencies": {
-    "@babel/runtime": "^7.1.5",
-    "fs-posix": "^6.0.0",
-    "git-win": "^2.2.4",
-    "lru-cache": "^5.1.1"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.1.5",
-    "@babel/core": "^7.1.6",
-    "@babel/plugin-transform-runtime": "^7.1.0",
-    "@babel/preset-env": "^7.1.6",
-    "@babel/register": "^7.0.0",
-    "codecov": "^3.1.0",
-    "eclint": "^2.8.1",
-    "eslint": "^5.9.0",
-    "eslint-config-standard": "^12.0.0",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-node": "^8.0.0",
-    "eslint-plugin-promise": "^4.0.1",
-    "eslint-plugin-standard": "^4.0.0",
-    "expect.js": "^0.3.1",
-    "fs-extra": "^7.0.1",
-    "mocha": "^5.2.0",
-    "nyc": "^13.1.0"
-  },
-  "directories": {
-    "test": "test"
-  },
-  "engines": {
-    "node": ">=4"
-  },
-  "homepage": "https://github.com/gucong3000/git-bash-shell#readme",
   "keywords": [
     "child_process",
     "terminal",
@@ -49,8 +14,44 @@
     "sh"
   ],
   "license": "MIT",
+  "homepage": "https://github.com/gucong3000/git-bash-shell#readme",
+  "author": "gucong3000",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gucong3000/git-bash-shell.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gucong3000/git-bash-shell/issues"
+  },
   "main": "lib/index.js",
-  "name": "git-bash-shell",
+  "bin": "./bin/git-bash-shell.cmd",
+  "dependencies": {
+    "@babel/runtime": "^7.2.0",
+    "fs-posix": "^6.0.0",
+    "git-win": "^2.2.5",
+    "iconv-lite": "^0.4.24",
+    "lru-cache": "^5.1.1",
+    "stdcp": "^1.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.0",
+    "@babel/core": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.2.0",
+    "@babel/preset-env": "^7.2.0",
+    "@babel/register": "^7.0.0",
+    "codecov": "^3.1.0",
+    "eclint": "^2.8.1",
+    "eslint": "^5.10.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^8.0.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "expect.js": "^0.3.1",
+    "fs-extra": "^7.0.1",
+    "mocha": "^5.2.0",
+    "nyc": "^13.1.0"
+  },
   "nyc": {
     "reporter": [
       "lcov",
@@ -58,22 +59,19 @@
     ],
     "cache": true
   },
-  "os": [
-    "win32"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/gucong3000/git-bash-shell.git"
-  },
   "scripts": {
-    "postinstall": "node lib/postinstall",
+    "install": "node lib/install",
     "build": "babel src --out-dir lib",
     "prepare": "npm run build",
     "lint:eclint": "eclint check $(git ls-files | tee /tmp/git-files)",
     "lint:eslint": "eslint $(grep \"\\.js$\" /tmp/git-files)",
-    "pretest": "npm run lint:eclint && npm run lint:eslint",
-    "test": "nyc mocha --no-timeouts",
+    "lint": "npm run lint:eclint && npm run lint:eslint",
+    "pretest": "env npm run lint --script-shell=/bin/sh",
+    "test": "npm run unit",
+    "unit": "node.exe node_modules/nyc/bin/nyc.js mocha --no-timeouts",
     "report-coverage": "codecov"
   },
-  "version": "2.2.0"
+  "os": [
+    "win32"
+  ]
 }

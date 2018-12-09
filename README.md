@@ -22,6 +22,7 @@ Use Git Bash as cross-platform shell for Windows
 - Add POSIX style path support for these npm config items:
   - [shell](https://docs.npmjs.com/misc/config#shell)
   - [script-shell](https://docs.npmjs.com/misc/config#script-shell)
+- Add [Windows code page](https://en.wikipedia.org/wiki/Windows_code_page) support for executable file in `%windir%` directory (Target encoding must be set in `process.env.LANG`).
 
 ## Install
 
