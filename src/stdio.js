@@ -2,7 +2,7 @@
 const iconv = require("iconv-lite");
 const getEnvValue = require("./get-env-value");
 let stdcp;
-
+// HKEY_CLASSES_ROOT\MIME\Database\Charset
 const magic = {
 	// Japanese
 	"932": "Shift_JIS",
@@ -95,7 +95,7 @@ function getEncoding () {
 	if (!stdcp) {
 		stdcp = require("stdcp");
 	}
-	const codepage = stdcp.get();
+	const codepage = stdcp.getSync();
 	return [
 		getCodeName(codepage),
 		String(codepage),
