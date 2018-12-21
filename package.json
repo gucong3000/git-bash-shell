@@ -31,7 +31,7 @@
     "git-win": "^2.2.5",
     "iconv-lite": "^0.4.24",
     "lru-cache": "^5.1.1",
-    "stdcp": "^1.0.0"
+    "stdcp": "^2.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.0",
