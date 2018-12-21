@@ -11,7 +11,7 @@ describe("code page", () => {
 	const iconvBak = {};
 
 	before(() => {
-		getCP = stdcp.get;
+		getCP = stdcp.getSync;
 		Object.assign(iconvBak, iconv);
 		iconv.decode = function (buf, encoding) {
 			fromEncoding = fromEncoding || encoding;
@@ -24,7 +24,7 @@ describe("code page", () => {
 	});
 
 	after(() => {
-		stdcp.get = getCP;
+		stdcp.getSync = getCP;
 		Object.assign(iconv, iconvBak);
 	});
 
@@ -34,7 +34,7 @@ describe("code page", () => {
 	});
 
 	function fixstdio (codepage, from, to, string, lang) {
-		stdcp.get = () => codepage;
+		stdcp.getSync = () => codepage;
 		const ps = {
 			stdio: [
 				null,
@@ -102,7 +102,7 @@ describe("code page", () => {
 	});
 
 	it("output", () => {
-		stdcp.get = () => 950;
+		stdcp.getSync = () => 950;
 		const ps = {
 			output: [
 				null,
@@ -120,7 +120,7 @@ describe("code page", () => {
 	});
 
 	it("stderr", () => {
-		stdcp.get = () => 936;
+		stdcp.getSync = () => 936;
 		const ps = {
 			stdio: [
 				null,
@@ -139,7 +139,7 @@ describe("code page", () => {
 	});
 
 	it("unknow ps object type", () => {
-		stdcp.get = () => 65001;
+		stdcp.getSync = () => 65001;
 		const ps = {};
 		stdio.call(ps, {
 			env: {
@@ -152,7 +152,7 @@ describe("code page", () => {
 	});
 
 	it("unknow stdio type", () => {
-		stdcp.get = () => 936;
+		stdcp.getSync = () => 936;
 		const ps = {
 			stdio: [
 				null,
