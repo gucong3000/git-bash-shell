@@ -1,6 +1,6 @@
 {
   "name": "git-bash-shell",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "Use Git Bash as cross-platform shell for Windows",
   "keywords": [
     "child_process",
@@ -27,6 +27,7 @@
   "bin": "./bin/git-bash-shell.cmd",
   "dependencies": {
     "@babel/runtime": "^7.2.0",
+    "alias-win": "^1.0.0",
     "fs-posix": "^6.0.0",
     "git-win": "^2.3.0",
     "iconv-lite": "^0.4.24",

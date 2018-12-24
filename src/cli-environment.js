@@ -1,5 +1,6 @@
 "use strict";
 const spawn = require("./spawn");
+const aliasWin = require("alias-win");
 const gitWin = require("git-win");
 const path = require("path");
 const fs = require("fs");
@@ -8,49 +9,31 @@ const promisify = require("util").promisify || require("util.promisify");
 const binDir = path.join(__dirname, "../bin");
 require("./env-value");
 
+function getDefaultAliases () {
+	const gitPath = file => path.join("%GIT_INSTALL_ROOT%", file);
+	const env = cmds => cmds ? `env.exe ${cmds} $*` : "env.exe $*";
+	const shell = shell => env(`"SHELL=${gitPath(shell)}" ${path.basename(shell, ".exe")}`);
+	const js = js => env(`node "${require.resolve(js)}"`);
+	const sh = shell("/bin/sh");
+	return {
+		alias: js("alias-win/bin/alias"),
+		unalias: js("alias-win/bin/unalias"),
+		npx: env("npx"),
+		npm: env("npm"),
+		bash: shell("/bin/bash"),
+		dash: shell("/bin/dash"),
+		zsh: shell("/usr/bin/zsh"),
+		sh,
+		env: `if defined SHELL ( ${env()} ) else ( ${env(`"SHELL=${gitPath("bin/sh")}" env.exe`)} )`,
+		"$SHELL": `if defined SHELL ( ${env("\"%SHELL%\"")} ) else ( ${sh} )`,
+	};
+}
+
 function set (key, value) {
 	value = value || process.env[key];
 	if (value) {
 		console.log(`set "${key}=${value}"`);
 	}
-}
-
-const defaultAlias = {
-	"ll": "ls -l $*",
-	"ls": "ls -F --color=auto --show-control-chars $*",
-	"swi": "sudo winpty $*",
-	"wi": "winpty $*",
-};
-
-async function updateAlias (alias) {
-	const aliaKeys = Object.keys(alias);
-	if (!aliaKeys.length) {
-		return;
-	}
-	/*
-	const fileName = path.join(__dirname, "../bin/git-bash-shell.cmd");
-	const rawCmds = await promisify(fs.readFile)(fileName, "utf8");
-	const newAlias = Object.assign({}, defaultAlias, alias);
-	const newCmds = (rawCmds).split(/[\r\n]+/g).filter(line => line[0] === ";").concat(
-		Object.keys(newAlias).map(key => `${key}=${newAlias[key]}`),
-		""
-	).join("\r\n");
-
-	if (rawCmds === newCmds) {
-		return;
-	}
-
-	try {
-		await promisify(fs.writeFile)(fileName, newCmds);
-		return;
-	} catch (ex) {
-		//
-	}
-	*/
-	const doskey = `"${path.join(process.env.windir || process.env.SystemRoot, "System32/doskey.exe")}"`;
-	console.log(
-		aliaKeys.map(key => `${doskey} ${key}=${alias[key]}`).join("\r\n")
-	);
 }
 
 async function login () {
@@ -75,7 +58,13 @@ async function login () {
 		},
 		encoding: "utf8",
 	});
-	const alias = {};
+
+	const rawAliases = await aliasWin.get();
+	const aliases = Object.assign(
+		getDefaultAliases(),
+		rawAliases
+	);
+
 	env.split(/[\r\n]+/g).forEach(env => {
 		if (!env || /^(?:!.+|_|(?:ORIGINAL|MSYSTEM|MINGW)(?:_.+)?|HOME|PWD|SHELL|TERM|PS1|SHLVL|SYSTEMROOT|WINDIR)=/i.test(env) || /=\/mingw\d+(?=\/|$)/.test(env)) {
 			return;
@@ -85,16 +74,22 @@ async function login () {
 			set("PATH");
 			return;
 		} else if (/^alias\s+(.*?)\s*=\s*(['"])?(.*)\2$/.test(env)) {
-			const key = RegExp.$1;
-			const value = RegExp.$3.replace(/\s*$/, " $*");
-			if (!defaultAlias[key] || defaultAlias[key] !== value) {
-				alias[key] = value;
-			}
+			const {
+				$1: key,
+				$3: value,
+			} = RegExp;
+			aliases[key] = value.replace(/\s*$/, " $*");
 			return;
 		}
 		console.log(`set "${env}"`);
 	});
-	await updateAlias(alias);
+
+	for (const name in rawAliases) {
+		if (aliases[name] === rawAliases[name]) {
+			delete aliases[name];
+		}
+	}
+	await aliasWin.set(aliases);
 }
 
 async function npmrc () {
