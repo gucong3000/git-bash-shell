@@ -63,9 +63,9 @@ describe("code page", () => {
 	testcase(54936, "GB18030", "UTF-8", "简体中文", "zh_CN");
 	testcase(950, "Big5", "UTF-8", "正體中文", "zh_TW");
 	testcase(950, "Big5", "UTF-16LE", "正體中文", "zh_TW");
-	testcase(20437, "IBM437", "UTF-8", "testcase", "en_US");
+	testcase(437, "IBM437", "UTF-8", "testcase", "en_US");
 	testcase(850, "IBM850", "UTF-8", testStringLatin1);
-	testcase(1252, "Windows-1252", "UTF-8", testStringLatin1);
+	testcase(1252, "ISO-8859-1", "UTF-8", testStringLatin1);
 	testcase(28605, "ISO-8859-15", "UTF-8", testStringLatin1);
 	testcase(1200, "UTF-16LE", "UTF-8", testStringLatin1);
 	testcase(1201, "UTF-16BE", "UTF-8", testStringLatin1);
@@ -114,7 +114,7 @@ describe("code page", () => {
 				LANG: "zh_TW.UTF-16LE",
 			},
 		});
-		expect(fromEncoding).to.equal("Big5");
+		expect(fromEncoding).to.equal("big5");
 		expect(toEncoding).to.equal("UTF-16LE");
 		expect(ps.stdout.equals(Buffer.from("正體中文", "UTF-16LE"))).to.equal(true);
 	});
@@ -133,7 +133,7 @@ describe("code page", () => {
 				LANG: "zh_CN.UTF-16LE",
 			},
 		});
-		expect(fromEncoding).to.equal("GB2312");
+		expect(fromEncoding).to.equal("gb2312");
 		expect(toEncoding).to.equal("UTF-16LE");
 		expect(ps.stderr.equals(Buffer.from("简体中文", "UTF-16LE"))).to.equal(true);
 	});
