@@ -5,7 +5,7 @@ const path = require("path");
 const util = require("util");
 const os = require("os");
 
-const expect = require("expect.js");
+const expect = require("chai").expect;
 
 describe("getEnvValue()", () => {
 	it("get $HOME by `process.env.HOME`", () => {
