@@ -1,6 +1,6 @@
 "use strict";
 const fs = require("fs-extra");
-const expect = require("expect.js");
+const expect = require("chai").expect;
 const spawn = require("../src/spawn");
 const childProcess = require("child_process");
 
@@ -112,6 +112,6 @@ describe("integration", () => {
 		} catch (ex) {
 			//
 		}
-		expect(result).to.not.ok();
+		expect(result).to.not.ok;
 	});
 });

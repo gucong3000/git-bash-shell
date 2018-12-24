@@ -1,6 +1,6 @@
 "use strict";
 const childProcess = require("child_process");
-const expect = require("expect.js");
+const expect = require("chai").expect;
 const gitWin = require("git-win");
 const fs = require("fs-extra");
 const path = require("path");
@@ -121,7 +121,7 @@ describe("fix-spawn-args", () => {
 		if (result.options) {
 			expect(result.options.file).to.equal(mockFile);
 		}
-		expect(result.error).to.not.ok();
+		expect(result.error).to.not.ok;
 		// console.error(result.stderr);
 		expect(result.stderr.trim()).to.equal("");
 		expect(result.stdout.trim()).to.equal("test\\bash-shell-bin");

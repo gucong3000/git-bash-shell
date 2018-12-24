@@ -3,7 +3,7 @@ const install = require.resolve("../src/install");
 const fs = require("fs-extra");
 const spawn = require("../src/spawn");
 const reg = require("../src/reg");
-const expect = require("expect.js");
+const expect = require("chai").expect;
 const path = require("path");
 
 describe("install", () => {

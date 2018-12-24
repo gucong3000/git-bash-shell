@@ -1,6 +1,6 @@
 "use strict";
 const iconv = require("iconv-lite");
-const expect = require("expect.js");
+const expect = require("chai").expect;
 const stdcp = require("stdcp");
 const stdio = require("../src/stdio");
 
@@ -52,7 +52,7 @@ describe("code page", () => {
 	function testcase (codepage, from, to, string, lang) {
 		it(`${codepage} (${from}) => ${to}`, () => {
 			const ps = fixstdio(codepage, from, to, string, lang);
-			expect(fromEncoding).to.equal(from);
+			expect(fromEncoding.replace(/[\W_]/g, "").toLowerCase()).to.equal(from.replace(/[\W_]/g, "").toLowerCase());
 			expect(toEncoding).to.equal(to);
 			expect(ps.stdout.equals(iconvBak.encode.apply(iconv, [string, to]))).to.equal(true);
 		});
@@ -78,7 +78,7 @@ describe("code page", () => {
 		const buf = Buffer.from("中文", "UTF-16LE");
 		const ps = fixstdio(1200, "UTF-16LE", "UTF-16LE", buf);
 		expect(ps.stdio[1]).to.equal(buf);
-		expect(ps.stdout).to.not.ok();
+		expect(ps.stdout).to.not.ok;
 		expect(fromEncoding).to.equal(null);
 		expect(toEncoding).to.equal(null);
 	});
@@ -87,7 +87,7 @@ describe("code page", () => {
 		const buf = Buffer.from("中文", "UTF-8");
 		const ps = fixstdio(65001, "UTF-8", "UTF-8", buf);
 		expect(ps.stdio[1]).to.equal(buf);
-		expect(ps.stdout).to.not.ok();
+		expect(ps.stdout).to.not.ok;
 		expect(fromEncoding).to.equal(null);
 		expect(toEncoding).to.equal(null);
 	});
@@ -173,7 +173,7 @@ describe("code page", () => {
 		const ps = fixstdio(65001, "UTF-8", "UTF-64LE", "中文");
 		expect(Buffer.isBuffer(ps.stdio[1])).to.equal(true);
 		expect(ps.stdio[1].toString()).to.equal("中文");
-		expect(ps.stdout).to.not.ok();
+		expect(ps.stdout).to.not.ok;
 		expect(fromEncoding).to.equal(null);
 		expect(toEncoding).to.equal(null);
 	});
@@ -182,7 +182,7 @@ describe("code page", () => {
 		const ps = fixstdio(600, "UTF-8", "UTF-16LE", "中文");
 		expect(Buffer.isBuffer(ps.stdio[1])).to.equal(true);
 		expect(ps.stdio[1].toString()).to.equal("中文");
-		expect(ps.stdout).to.not.ok();
+		expect(ps.stdout).to.not.ok;
 		expect(fromEncoding).to.equal(null);
 		expect(toEncoding).to.equal(null);
 	});

@@ -1,6 +1,6 @@
 "use strict";
 const which = require("../src/which");
-const expect = require("expect.js");
+const expect = require("chai").expect;
 const gitWin = require("git-win");
 const path = require("path");
 

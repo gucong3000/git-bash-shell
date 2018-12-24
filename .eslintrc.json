@@ -66,7 +66,8 @@
 				"mocha": true
 			},
 			"rules": {
-				"no-template-curly-in-string": "off"
+				"no-template-curly-in-string": "off",
+				"no-unused-expressions": "off"
 			}
 		}
 	]

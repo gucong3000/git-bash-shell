@@ -1,5 +1,5 @@
 "use strict";
-const expect = require("expect.js");
+const expect = require("chai").expect;
 const childProcess = require("child_process");
 const gitWin = require("git-win");
 const path = require("path");
@@ -60,7 +60,7 @@ describe("env-value", () => {
 					cwd: gitWin.root,
 					encoding: "utf8",
 				});
-				expect(result.error).to.not.ok();
+				expect(result.error).to.not.ok;
 				expect(result.stderr).to.equal("");
 				expect(result.stdout).to.equal(shell + "\n");
 			});
