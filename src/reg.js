@@ -13,9 +13,11 @@ function parseValue (type, value) {
 		case "REG_DWORD": {
 			return parseInt(value);
 		}
-		// case 'REG_QWORD': {
-		// 	value = hexToUint8Array(value);
-		// 	break;
+		case "REG_BINARY": {
+			return binToUint8Array(value);
+		}
+		// case "REG_QWORD": {
+		// 	return hexToUint8Array(value);
 		// }
 	}
 	return value;
@@ -25,14 +27,22 @@ function parseValue (type, value) {
 // 	const prefix = hex.slice(0, 2);
 // 	hex = hex.slice(2);
 // 	if ((hex.length % 2) !== 0) {
-// 		hex = '0' + hex;
+// 		hex = "0" + hex;
 // 	}
-// 	var view = new Uint8Array(hex.length / 2);
-// 	for (var i = 0; i < hex.length; i += 2) {
+// 	const view = new Uint8Array(hex.length / 2);
+// 	for (let i = 0; i < hex.length; i += 2) {
 // 		view[i / 2] = parseInt(prefix + hex.slice(i, i + 2));
 // 	}
 // 	return view;
 // }
+
+function binToUint8Array (bin) {
+	const view = new Uint8Array(bin.length / 2);
+	for (let i = 0; i < bin.length; i += 2) {
+		view[i / 2] = parseInt(bin.slice(i, i + 2), 16);
+	}
+	return view;
+}
 
 // function strToHex (value) {
 // 	if (!value) {
@@ -86,27 +96,43 @@ async function add (key, values) {
 const reqCache = {};
 
 async function queryAsync (key) {
+	const result = {};
 	const stdout = await spawn([
 		regExe,
 		"QUERY",
 		key,
+		"/s",
 		"/reg:" + osArch,
 	], {
 		argv0: "reg",
 		encoding: "utf8",
 	});
-	return new Proxy({}, {
-		get: (target, name) => {
-			if (typeof name === "string" && !target[name]) {
-				const key = new RegExp(`^\\s+${name}\\s+(REG(?:_[A-Z]+)+)\\s+(.+)$`, "im").exec(stdout);
-				if (key) {
-					target[name] = key[2];
-					return parseValue(key[1], key[2]);
-				}
+	let prefix;
+	let currKey = result;
+	stdout.split(/[\r\n]+/g).forEach(line => {
+		if (line.startsWith("HKEY_")) {
+			if (prefix == null) {
+				prefix = "";
+				key = line.slice(0, line.indexOf("\\") + key.replace(/^\w+/, "").length);
 			}
-			return target[name];
-		},
+			prefix = line.slice(key.length + 1);
+			currKey = result;
+			prefix.split(/\\/g).filter(Boolean).forEach(key => {
+				if (!currKey[key]) {
+					currKey[key] = {};
+				}
+				currKey = currKey[key];
+			});
+		} else if (/^\s+(.*?)\s+(REG_[A-Z_]+)\s+(.*?)$/.test(line)) {
+			const {
+				$1: key,
+				$2: type,
+				$3: value,
+			} = RegExp;
+			currKey[key] = parseValue(type, value);
+		}
 	});
+	return result;
 }
 
 function query (key) {

@@ -1,12 +1,17 @@
 "use strict";
 const spawn = require("./spawn");
 const reg = require("./reg");
+const charset = require("./charset");
 const gitWin = require("git-win");
 const path = require("path");
 const url = require("url");
 const fs = require("fs");
 const promisify = require("util").promisify || require("util.promisify");
 const curl = gitWin.toWin32("/mingw00/bin/curl.exe");
+const readFile = promisify(fs.readFile);
+const writeFile = promisify(fs.writeFile);
+const readdir = promisify(fs.readdir);
+const mkdir = promisify(fs.mkdir);
 
 async function autoRun () {
 	const cmdPath = path.join(/[\\/]node_modules[\\/]/i.test(__dirname) ? "node_modules/.bin" : "bin", "git-bash-shell.cmd");
@@ -48,9 +53,9 @@ async function getLocation (from) {
 async function checkCmder (cmderDir, cmderVer) {
 	let files;
 	try {
-		files = await promisify(fs.readdir)(cmderDir);
+		files = await readdir(cmderDir);
 	} catch (ex) {
-		await promisify(fs.mkdir)(cmderDir);
+		await mkdir(cmderDir);
 		return false;
 	}
 	return files.some(file => /^Version\s+(.+)$/i.test(file) && RegExp.$1.startsWith(cmderVer));
@@ -134,23 +139,24 @@ async function getCmder () {
 	}
 
 	const clinkFile = path.join(cmderDir, "vendor/clink.lua");
-	let clinkConfig = await promisify(fs.readFile)(clinkFile, "utf8");
+	let clinkConfig = await readFile(clinkFile, "utf8");
 	clinkConfig = clinkConfig.replace(/λ/g, "$");
 	if (RegExp.lastMatch === "λ") {
-		await promisify(fs.writeFile)(clinkFile, clinkConfig);
+		await writeFile(clinkFile, clinkConfig);
 	}
 }
 
 async function cmd () {
 	const cmdFile = require.resolve("../bin/git-bash-shell.cmd");
-	let cmd = await promisify(fs.readFile)(cmdFile, "utf8");
+	let cmd = await readFile(cmdFile, "utf8");
 	const osArch = /64$/.test(process.env.PROCESSOR_ARCHITEW6432 || process.arch) ? 64 : 86;
 	cmd = cmd.replace(/(\bclink_x)\d*/, "$1" + osArch);
-	await promisify(fs.writeFile)(cmdFile, cmd);
+	await writeFile(cmdFile, cmd);
 }
 
 module.exports = Promise.all([
 	autoRun(),
+	charset(),
 	getCmder(),
 	cmd(),
 ]).then(() => {

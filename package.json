@@ -62,7 +62,7 @@
   },
   "scripts": {
     "install": "node lib/install",
-    "build": "babel src --out-dir lib",
+    "build": "babel src --out-dir lib && cp src/*.json lib/",
     "prepare": "npm run build",
     "lint:eclint": "eclint check $(git ls-files | tee /tmp/git-files)",
     "lint:eslint": "eslint $(grep \"\\.js$\" /tmp/git-files)",
