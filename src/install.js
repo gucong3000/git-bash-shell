@@ -11,10 +11,11 @@ const curl = gitWin.toWin32("/mingw00/bin/curl.exe");
 const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
 const readdir = promisify(fs.readdir);
+const unlink = promisify(fs.unlink);
 const mkdir = promisify(fs.mkdir);
 
 async function autoRun () {
-	const cmdPath = path.join(/[\\/]node_modules[\\/]/i.test(__dirname) ? "node_modules/.bin" : "bin", "git-bash-shell.cmd");
+	const cmdPath = path.normalize("node_modules/.bin/git-bash-shell.cmd");
 	// return reg.add(`HK${isAdmin ? "LM" : "CU"}/Software/Microsoft/Command Processor`, {
 	return reg.add("HKCU/Software/Microsoft/Command Processor", {
 		AutoRun: `
@@ -152,6 +153,14 @@ async function cmd () {
 	const osArch = /64$/.test(process.env.PROCESSOR_ARCHITEW6432 || process.arch) ? 64 : 86;
 	cmd = cmd.replace(/(\bclink_x)\d*/, "$1" + osArch);
 	await writeFile(cmdFile, cmd);
+	const binDir = path.join(/^(.+?)[\\/]node_modules[\\/]/.test(__dirname) ? RegExp.$1 : process.cwd(), "node_modules/.bin");
+	const sh = path.join(binDir, "git-bash-shell");
+	await writeFile(sh + ".cmd", `@"%~dp0\\${path.relative(binDir, cmdFile)}" %*`);
+	try {
+		await unlink(sh);
+	} catch (ex) {
+		//
+	}
 }
 
 module.exports = Promise.all([
